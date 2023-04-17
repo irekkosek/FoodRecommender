@@ -1,0 +1,13 @@
+[
+    {
+        "actiontype": "add"
+    },
+    {
+        "recipeName": "pizza",
+        "cuisine": "Italian",
+        "course": "dinner",
+        "diet": "Non Vegeterian",
+        "prep_time": "15 M",
+        "cook_time": "20 M"
+    }
+]
