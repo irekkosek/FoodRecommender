@@ -1,0 +1,12 @@
+[
+    {
+        "responsetype": "searchResponse"
+    },
+    {
+        "recipeId": "1",
+        "recipeName": "pizza",
+        "link": "https://generic.url",
+        "image_link": "https://generic.url/image",
+        "description": "long description string"
+    }
+]
