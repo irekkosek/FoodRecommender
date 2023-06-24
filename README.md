@@ -23,8 +23,14 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
+for development with npm
 ```sh
 npm install
+```
+
+for development with python
+```sh
+pip install -r requirements.txt
 ```
 
 ### Compile and Hot-Reload for Development
