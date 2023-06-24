@@ -19,106 +19,106 @@ model RECPIES {
     video_url     String?
     thumbnail_url String?
 
-    ratings_negative                 String? @default("0")
-    ratings_positive                 String?
-    score                            String?
-    cooking_style_big_batch          String?
-    cooking_style_kid_friendly       String?
-    cooking_style_bake               String?
-    meal_breakfast                   String?
-    meal_bakery_goods                String?
-    cuisine_american                 String?
-    meal_drinks                      String?
-    difficulty_5_ingredients_or_less String?
-    healthy_low_calorie              String?
-    difficulty_easy                  String?
-    dietary_gluten_free              String?
-    dietary_vegetarian               String?
-    difficulty_under_1_hour          String?
-    difficulty_under_45_minutes      String?
-    healthy_high_protein             String?
-    dietary_kid_friendly             String?
-    cuisine_fusion                   String?
-    method_steam                     String?
-    cuisine_japanese                 String?
-    dietary_comfort_food             String?
-    dietary_indulgent_sweets         String?
-    method_bake                      String?
-    dietary_dairy_free               String?
-    cooking_style_one_pot_or_pan     String?
-    cooking_style_pan_fry            String?
-    dietary_healthy                  String?
-    method_pan_fry                   String?
-    healthy_low_fat                  String?
-    healthy_low_sugar                String?
-    healthy_low_carb                 String?
-    cooking_style_mashup             String?
-    meal_snacks                      String?
-    seasonal_winter                  String?
-    cuisine_british                  String?
-    cooking_style_comfort_food       String?
-    healthy_high_fiber               String?
-    cuisine_french                   String?
-    meal_desserts                    String?
-    difficulty_under_15_minutes      String?
-    difficulty_under_30_minutes      String?
-    dietary_keto                     String?
-    seasonal_summer                  String?
-    cooking_style_no_bake_desserts   String?
-    dietary_vegan                    String?
-    cuisine_mexican                  String?
-    seasonal_spring                  String?
-    cuisine_italian                  String?
-    meal_lunch                       String?
-    seasonal_fall                    String?
-    cuisine_german                   String?
-    cooking_style_meal_prep          String?
-    meal_dinner                      String?
-    meal_appetizers                  String?
-    meal_sides                       String?
-    cuisine_african                  String?
-    cuisine_middle_eastern           String?
-    method_deep_fry                  String?
-    cuisine_latin_american           String?
-    method_grill                     String?
-    cuisine_dominican                String?
-    dietary_pescatarian              String?
-    cuisine_seafood                  String?
-    cuisine_chinese                  String?
-    cuisine_greek                    String?
-    dietary_contains_alcohol         String?
-    cuisine_indian                   String?
-    cooking_style_steam              String?
-    cooking_style_stuffed            String?
-    cuisine_caribbean                String?
-    cuisine_filipino                 String?
-    cuisine_taiwanese                String?
-    cuisine_korean                   String?
-    cuisine_jamaican                 String?
-    meal_brunch                      String?
-    cuisine_swedish                  String?
-    cooking_style_deep_fry           String?
-    cuisine_west_african             String?
-    cuisine_thai                     String?
-    cuisine_vietnamese               String?
-    cuisine_peruvian                 String?
-    cuisine_brazilian                String?
-    cooking_style_grill              String?
-    cuisine_bbq                      String?
-    cuisine_kenyan                   String?
-    cuisine_haitian                  String?
-    cuisine_persian                  String?
-    cuisine_ethiopian                String?
-    cuisine_cuban                    String?
-    cuisine_puerto_rican             String?
-    cuisine_soul_food                String?
-    cuisine_indigenous               String?
-    cuisine_laotian                  String?
-    cuisine_hawaiian                 String?
-    method_no_bake_desserts          String?
-    cuisine_lebanese                 String?
-    cuisine_south_african            String?
-    cuisine_venezuelan               String?
+    ratings_negative                 Int? @default(0)
+    ratings_positive                 Int? @default(0)
+    score                            Int? @default(0)
+    cooking_style_big_batch          Int? @default(0)
+    cooking_style_kid_friendly       Int? @default(0)
+    cooking_style_bake               Int? @default(0)
+    meal_breakfast                   Int? @default(0)
+    meal_bakery_goods                Int? @default(0)
+    cuisine_american                 Int? @default(0)
+    meal_drinks                      Int? @default(0)
+    difficulty_5_ingredients_or_less Int? @default(0)
+    healthy_low_calorie              Int? @default(0)
+    difficulty_easy                  Int? @default(0)
+    dietary_gluten_free              Int? @default(0)
+    dietary_vegetarian               Int? @default(0)
+    difficulty_under_1_hour          Int? @default(0)
+    difficulty_under_45_minutes      Int? @default(0)
+    healthy_high_protein             Int? @default(0)
+    dietary_kid_friendly             Int? @default(0)
+    cuisine_fusion                   Int? @default(0)
+    method_steam                     Int? @default(0)
+    cuisine_japanese                 Int? @default(0)
+    dietary_comfort_food             Int? @default(0)
+    dietary_indulgent_sweets         Int? @default(0)
+    method_bake                      Int? @default(0)
+    dietary_dairy_free               Int? @default(0)
+    cooking_style_one_pot_or_pan     Int? @default(0)
+    cooking_style_pan_fry            Int? @default(0)
+    dietary_healthy                  Int? @default(0)
+    method_pan_fry                   Int? @default(0)
+    healthy_low_fat                  Int? @default(0)
+    healthy_low_sugar                Int? @default(0)
+    healthy_low_carb                 Int? @default(0)
+    cooking_style_mashup             Int? @default(0)
+    meal_snacks                      Int? @default(0)
+    seasonal_winter                  Int? @default(0)
+    cuisine_british                  Int? @default(0)
+    cooking_style_comfort_food       Int? @default(0)
+    healthy_high_fiber               Int? @default(0)
+    cuisine_french                   Int? @default(0)
+    meal_desserts                    Int? @default(0)
+    difficulty_under_15_minutes      Int? @default(0)
+    difficulty_under_30_minutes      Int? @default(0)
+    dietary_keto                     Int? @default(0)
+    seasonal_summer                  Int? @default(0)
+    cooking_style_no_bake_desserts   Int? @default(0)
+    dietary_vegan                    Int? @default(0)
+    cuisine_mexican                  Int? @default(0)
+    seasonal_spring                  Int? @default(0)
+    cuisine_italian                  Int? @default(0)
+    meal_lunch                       Int? @default(0)
+    seasonal_fall                    Int? @default(0)
+    cuisine_german                   Int? @default(0)
+    cooking_style_meal_prep          Int? @default(0)
+    meal_dinner                      Int? @default(0)
+    meal_appetizers                  Int? @default(0)
+    meal_sides                       Int? @default(0)
+    cuisine_african                  Int? @default(0)
+    cuisine_middle_eastern           Int? @default(0)
+    method_deep_fry                  Int? @default(0)
+    cuisine_latin_american           Int? @default(0)
+    method_grill                     Int? @default(0)
+    cuisine_dominican                Int? @default(0)
+    dietary_pescatarian              Int? @default(0)
+    cuisine_seafood                  Int? @default(0)
+    cuisine_chinese                  Int? @default(0)
+    cuisine_greek                    Int? @default(0)
+    dietary_contains_alcohol         Int? @default(0)
+    cuisine_indian                   Int? @default(0)
+    cooking_style_steam              Int? @default(0)
+    cooking_style_stuffed            Int? @default(0)
+    cuisine_caribbean                Int? @default(0)
+    cuisine_filipino                 Int? @default(0)
+    cuisine_taiwanese                Int? @default(0)
+    cuisine_korean                   Int? @default(0)
+    cuisine_jamaican                 Int? @default(0)
+    meal_brunch                      Int? @default(0)
+    cuisine_swedish                  Int? @default(0)
+    cooking_style_deep_fry           Int? @default(0)
+    cuisine_west_african             Int? @default(0)
+    cuisine_thai                     Int? @default(0)
+    cuisine_vietnamese               Int? @default(0)
+    cuisine_peruvian                 Int? @default(0)
+    cuisine_brazilian                Int? @default(0)
+    cooking_style_grill              Int? @default(0)
+    cuisine_bbq                      Int? @default(0)
+    cuisine_kenyan                   Int? @default(0)
+    cuisine_haitian                  Int? @default(0)
+    cuisine_persian                  Int? @default(0)
+    cuisine_ethiopian                Int? @default(0)
+    cuisine_cuban                    Int? @default(0)
+    cuisine_puerto_rican             Int? @default(0)
+    cuisine_soul_food                Int? @default(0)
+    cuisine_indigenous               Int? @default(0)
+    cuisine_laotian                  Int? @default(0)
+    cuisine_hawaiian                 Int? @default(0)
+    method_no_bake_desserts          Int? @default(0)
+    cuisine_lebanese                 Int? @default(0)
+    cuisine_south_african            Int? @default(0)
+    cuisine_venezuelan               Int? @default(0)
 
     USER_likes_RECPIES USER_likes_RECPIES[]
 }
