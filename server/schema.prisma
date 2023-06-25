@@ -126,6 +126,7 @@ model RECPIES {
 model USERS {
     id                 Int                  @id @default(autoincrement())
     name               String?
+    password           String?
     USER_likes_RECPIES USER_likes_RECPIES[]
 }
 
