@@ -1,100 +1,105 @@
+id
+name
+slug
+video_url
+thumbnail_url
 ratings_negative
- ratings_positive
- score
- cooking_style_big_batch
- cooking_style_kid_friendly
- cooking_style_bake
- meal_breakfast
- meal_bakery_goods
- cuisine_american
- meal_drinks
- difficulty_5_ingredients_or_less
- healthy_low_calorie
- difficulty_easy
- dietary_gluten_free
- dietary_vegetarian
- difficulty_under_1_hour
- difficulty_under_45_minutes
- healthy_high_protein
- dietary_kid_friendly
- cuisine_fusion
- method_steam
- cuisine_japanese
- dietary_comfort_food
- dietary_indulgent_sweets
- method_bake
- dietary_dairy_free
- cooking_style_one_pot_or_pan
- cooking_style_pan_fry
- dietary_healthy
- method_pan_fry
- healthy_low_fat
- healthy_low_sugar
- healthy_low_carb
- cooking_style_mashup
- meal_snacks
- seasonal_winter
- cuisine_british
- cooking_style_comfort_food
- healthy_high_fiber
- cuisine_french
- meal_desserts
- difficulty_under_15_minutes
- difficulty_under_30_minutes
- dietary_keto
- seasonal_summer
- cooking_style_no_bake_desserts
- dietary_vegan
- cuisine_mexican
- seasonal_spring
- cuisine_italian
- meal_lunch
- seasonal_fall
- cuisine_german
- cooking_style_meal_prep
- meal_dinner
- meal_appetizers
- meal_sides
- cuisine_african
- cuisine_middle_eastern
- method_deep_fry
- cuisine_latin_american
- method_grill
- cuisine_dominican
- dietary_pescatarian
- cuisine_seafood
- cuisine_chinese
- cuisine_greek
- dietary_contains_alcohol
- cuisine_indian
- cooking_style_steam
- cooking_style_stuffed
- cuisine_caribbean
- cuisine_filipino
- cuisine_taiwanese
- cuisine_korean
- cuisine_jamaican
- meal_brunch
- cuisine_swedish
- cooking_style_deep_fry
- cuisine_west_african
- cuisine_thai
- cuisine_vietnamese
- cuisine_peruvian
- cuisine_brazilian
- cooking_style_grill
- cuisine_bbq
- cuisine_kenyan
- cuisine_haitian
- cuisine_persian
- cuisine_ethiopian
- cuisine_cuban
- cuisine_puerto_rican
- cuisine_soul_food
- cuisine_indigenous
- cuisine_laotian
- cuisine_hawaiian
- method_no_bake_desserts
- cuisine_lebanese
- cuisine_south_african
- cuisine_venezuelan
+ratings_positive
+score
+cooking_style_big_batch
+cooking_style_kid_friendly
+cooking_style_bake
+meal_breakfast
+meal_bakery_goods
+cuisine_american
+meal_drinks
+difficulty_5_ingredients_or_less
+healthy_low_calorie
+difficulty_easy
+dietary_gluten_free
+dietary_vegetarian
+difficulty_under_1_hour
+difficulty_under_45_minutes
+healthy_high_protein
+dietary_kid_friendly
+cuisine_fusion
+method_steam
+cuisine_japanese
+dietary_comfort_food
+dietary_indulgent_sweets
+method_bake
+dietary_dairy_free
+cooking_style_one_pot_or_pan
+cooking_style_pan_fry
+dietary_healthy
+method_pan_fry
+healthy_low_fat
+healthy_low_sugar
+healthy_low_carb
+cooking_style_mashup
+meal_snacks
+seasonal_winter
+cuisine_british
+cooking_style_comfort_food
+healthy_high_fiber
+cuisine_french
+meal_desserts
+difficulty_under_15_minutes
+difficulty_under_30_minutes
+dietary_keto
+seasonal_summer
+cooking_style_no_bake_desserts
+dietary_vegan
+cuisine_mexican
+seasonal_spring
+cuisine_italian
+meal_lunch
+seasonal_fall
+cuisine_german
+cooking_style_meal_prep
+meal_dinner
+meal_appetizers
+meal_sides
+cuisine_african
+cuisine_middle_eastern
+method_deep_fry
+cuisine_latin_american
+method_grill
+cuisine_dominican
+dietary_pescatarian
+cuisine_seafood
+cuisine_chinese
+cuisine_greek
+dietary_contains_alcohol
+cuisine_indian
+cooking_style_steam
+cooking_style_stuffed
+cuisine_caribbean
+cuisine_filipino
+cuisine_taiwanese
+cuisine_korean
+cuisine_jamaican
+meal_brunch
+cuisine_swedish
+cooking_style_deep_fry
+cuisine_west_african
+cuisine_thai
+cuisine_vietnamese
+cuisine_peruvian
+cuisine_brazilian
+cooking_style_grill
+cuisine_bbq
+cuisine_kenyan
+cuisine_haitian
+cuisine_persian
+cuisine_ethiopian
+cuisine_cuban
+cuisine_puerto_rican
+cuisine_soul_food
+cuisine_indigenous
+cuisine_laotian
+cuisine_hawaiian
+method_no_bake_desserts
+cuisine_lebanese
+cuisine_south_african
+cuisine_venezuelan
