@@ -1,0 +1,6 @@
+- CRUD
+- FastAPI endpoints
+- rework FoodRecommender
+ - read to pandas dataframe (from db->csv/json)
+ - take a correction for slightly changed tags
+ - export result to either API endpoint or temp db table
