@@ -31,6 +31,12 @@ npm install
 for development with python
 ```sh
 pip install -r requirements.txt
+prisma generate
+```
+
+to seed the database
+```sh
+python import_recipes.py
 ```
 
 ### Compile and Hot-Reload for Development
