@@ -5,10 +5,12 @@ from numpy import rec
 from prisma import Prisma, types
 import pandas as pd
 
-async def import_recpies(recipe: dict, verbose=False, debug=False) -> None:
+async def import_recpies(recipe: dict, verbose:bool=False, debug:bool=False, output_id:bool=False) -> None:
     db = Prisma()
     await db.connect()
-
+    # check if video_url is NaN
+    if type(recipe['video_url']) is float:
+        recipe['video_url'] = None
     # Create a new recipe
     new_recipe = await db.recpies.create(
         {
@@ -128,7 +130,9 @@ async def import_recpies(recipe: dict, verbose=False, debug=False) -> None:
         assert found is not None
         for found_recipe in found:
             print(f'found recipe: {found_recipe.json(indent=2)}')
-            
+    if output_id:
+        print(f'{new_recipe.id}')
+
     await db.disconnect()
 
 df = pd.read_csv(r"server/dishes_tags_reworked.csv")
@@ -139,8 +143,10 @@ recipe = {}
 for row in rows:
     # change row into dict
     recipe = row._asdict() 
-    asyncio.run(import_recpies(recipe))
-    break
+    asyncio.run(import_recpies(recipe, output_id=True))
+ 
+print("imported recipes complete")
+    
 
 
 
