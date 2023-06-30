@@ -1,8 +1,36 @@
 import asyncio
 from os import name
 import re
+from numpy import rec, where
 from prisma import Prisma
+from fastapi import FastAPI
+import json
 
+app = FastAPI()
+
+#uvicorn main:app --reload
+@app.get("/")
+async def root():
+    db = Prisma()
+    await db.connect()
+    found = await db.recpies.find_many(where={
+        'OR' : [
+            {'id': 1},
+            {'id': 27}
+            ]
+        }
+    )
+    await db.disconnect()
+
+    # convert found : List[RECPIES] to json
+    found_json = []
+    for recipe in found:
+        found_json.append(recipe.json())
+    
+    return found_json
+
+
+#python3 main.py
 async def main() -> None:
     db = Prisma()
     await db.connect()
