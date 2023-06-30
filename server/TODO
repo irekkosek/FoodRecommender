@@ -1,1 +1,3 @@
 add index option to output_id for pseudo progress bar 
+after some point move main.py to examples folder \
+and start developing a new main.py for the project
