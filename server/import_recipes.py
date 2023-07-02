@@ -12,7 +12,7 @@ async def import_recpies(recipe: dict, verbose:bool=False, debug:bool=False, out
     if type(recipe['video_url']) is float:
         recipe['video_url'] = None
     # Create a new recipe
-    new_recipe = await db.recpies.create(
+    new_recipe = await db.recipes.create(
         {
             'id': recipe['id'],
             'name': recipe['name'],
@@ -126,7 +126,7 @@ async def import_recpies(recipe: dict, verbose:bool=False, debug:bool=False, out
         print(f'created recipe: {new_recipe.json(indent=2)}')
 
     if debug:
-        found = await db.recpies.find_many(where={'id': new_recipe.id})
+        found = await db.recipes.find_many(where={'id': new_recipe.id})
         assert found is not None
         for found_recipe in found:
             print(f'found recipe: {found_recipe.json(indent=2)}')
