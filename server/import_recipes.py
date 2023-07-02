@@ -4,6 +4,7 @@ import re
 from numpy import rec
 from prisma import Prisma, types
 import pandas as pd
+from pathlib import Path
 
 async def import_recpies(recipe: dict, verbose:bool=False, debug:bool=False, output_id:bool=False) -> None:
     db = Prisma()
@@ -12,7 +13,7 @@ async def import_recpies(recipe: dict, verbose:bool=False, debug:bool=False, out
     if type(recipe['video_url']) is float:
         recipe['video_url'] = None
     # Create a new recipe
-    new_recipe = await db.recpies.create(
+    new_recipe = await db.recipes.create(
         {
             'id': recipe['id'],
             'name': recipe['name'],
@@ -126,7 +127,7 @@ async def import_recpies(recipe: dict, verbose:bool=False, debug:bool=False, out
         print(f'created recipe: {new_recipe.json(indent=2)}')
 
     if debug:
-        found = await db.recpies.find_many(where={'id': new_recipe.id})
+        found = await db.recipes.find_many(where={'id': new_recipe.id})
         assert found is not None
         for found_recipe in found:
             print(f'found recipe: {found_recipe.json(indent=2)}')
@@ -134,8 +135,10 @@ async def import_recpies(recipe: dict, verbose:bool=False, debug:bool=False, out
         print(f'{new_recipe.id}')
 
     await db.disconnect()
-
-df = pd.read_csv(r"server/dishes_tags_reworked.csv")
+filename="dishes_tags_reworked.csv"
+mod_path = Path(__file__).parent
+dataset_abs_path = (mod_path / filename).resolve()
+df = pd.read_csv(fr'{dataset_abs_path}')
 
 rows = df.itertuples() #(index=False)
 recipe = {}

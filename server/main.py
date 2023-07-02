@@ -13,7 +13,7 @@ app = FastAPI()
 async def root():
     db = Prisma()
     await db.connect()
-    found = await db.recpies.find_many(where={
+    found = await db.recipes.find_many(where={
         'OR' : [
             {'id': 1},
             {'id': 27}
@@ -36,7 +36,7 @@ async def main() -> None:
     await db.connect()
 
     # Create a new recipe
-    recipe = await db.recpies.create({
+    recipe = await db.recipes.create({
         'id': 1,
         'name': "Cinnamon Roll Coffee Cake",
         'slug': "cinnamon-roll-coffee-cake",
@@ -44,7 +44,7 @@ async def main() -> None:
     })
     print(f'created recipe: {recipe.json(indent=2)}')
 
-    found = await db.recpies.find_many(where={'id': recipe.id})
+    found = await db.recipes.find_many(where={'id': recipe.id})
     assert found is not None
     for recipe in found:
         print(f'found recipe: {recipe.json(indent=2)}')
