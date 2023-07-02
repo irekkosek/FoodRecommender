@@ -120,22 +120,22 @@ model RECIPES {
     cuisine_south_african            Int? @default(0)
     cuisine_venezuelan               Int? @default(0)
 
-    USER_likes_RECPIES USER_likes_RECPIES[]
+    USER_likes_RECIPES USER_likes_RECIPES[]
 }
 
 model USERS {
     id                 Int                  @id @default(autoincrement())
     name               String?
     password           String?
-    USER_likes_RECPIES USER_likes_RECPIES[]
+    USER_likes_RECIPES USER_likes_RECIPES[]
 }
 
-model USER_likes_RECPIES {
+model USER_likes_RECIPES {
     user      USERS   @relation(fields: [USER_id], references: [id])
     USER_id   Int
     recipe    RECIPES @relation(fields: [RECIPE_id], references: [id])
     RECIPE_id Int
 
     @@id([USER_id, RECIPE_id])
-    @@map("USER_likes_RECPIES")
+    @@map("USER_likes_RECIPES")
 }

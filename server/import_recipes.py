@@ -4,6 +4,7 @@ import re
 from numpy import rec
 from prisma import Prisma, types
 import pandas as pd
+from pathlib import Path
 
 async def import_recpies(recipe: dict, verbose:bool=False, debug:bool=False, output_id:bool=False) -> None:
     db = Prisma()
@@ -134,8 +135,10 @@ async def import_recpies(recipe: dict, verbose:bool=False, debug:bool=False, out
         print(f'{new_recipe.id}')
 
     await db.disconnect()
-
-df = pd.read_csv(r"server/dishes_tags_reworked.csv")
+filename="dishes_tags_reworked.csv"
+mod_path = Path(__file__).parent
+dataset_abs_path = (mod_path / filename).resolve()
+df = pd.read_csv(fr'{dataset_abs_path}')
 
 rows = df.itertuples() #(index=False)
 recipe = {}
