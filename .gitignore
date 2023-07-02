@@ -1,3 +1,10 @@
 server/.venv/
 .vscode
 **/__pycache__
+server/recomendations.csv
+server/recomendationsWithoutIds.csv
+server/restOfDatabase.csv
+server/restOfDatabaseWithoutIds.csv
+server/result.csv
+server/chosenByUser.csv
+server/chosenByUserWithoutIds.csv
