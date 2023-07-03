@@ -21,28 +21,12 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
+Vue:
 ## Project Setup
 
 for development with npm
 ```sh
 npm install
-```
-
-for development with python
-```sh
-pip install -r requirements.txt
-prisma generate
-```
-you can read more about prisma [here](https://prisma-client-py.readthedocs.io/en/stable/getting_started/setup/)
-
-to seed the database
-```sh
-python import_recipes.py
-```
-you can check the database with [prisma studio](https://www.prisma.io/studio)
-just run
-```sh
-prisma studio
 ```
 
 ### Compile and Hot-Reload for Development
@@ -71,13 +55,47 @@ npm run test:unit
 npm run lint
 ```
 Python:
+## requirements
+- python 3.9
+- pip
+- docker (this can be the only requirement if you plan to use docker for development)
+
+## Project Setup
+always first start with 
+```sh
+docker-compose up -d
+```
+this will, among few other things, start the database
+
+```sh
+cd server && python -m venv venv
+pip install -r requirements.txt
+prisma db push && prisma generate
+```
+you can read more about prisma [here](https://prisma-client-py.readthedocs.io/en/stable/getting_started/setup/)
+
+to seed the database
+```sh
+python import_recipes.py
+```
+you can check the database with [prisma studio](https://www.prisma.io/studio)
+just run
+```sh
+prisma studio
+```
+to run the example in main
+```sh
+python main.py
+```
 
 to run the server
 ```sh
 uvicorn main:app --reload
 ```
+
 you can find additional information about it [here](https://fastapi.tiangolo.com/tutorial/first-steps/)
 
 you can also find: 
 automatic interactive API documentation (provided by Swagger UI): [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 alternative automatic documentation (provided by ReDoc): [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc).
+
