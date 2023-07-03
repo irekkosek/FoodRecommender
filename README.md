@@ -21,7 +21,7 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-Vue:
+# Vue:
 ## Project Setup
 
 for development with npm
@@ -30,8 +30,6 @@ npm install
 ```
 
 ### Compile and Hot-Reload for Development
-
-Vue:
 
 ```sh
 npm run dev
@@ -54,7 +52,7 @@ npm run test:unit
 ```sh
 npm run lint
 ```
-Python:
+# Python:
 ## requirements
 - python 3.9
 - pip
