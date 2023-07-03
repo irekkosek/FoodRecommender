@@ -1,85 +1,115 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { app } from '@/main'
+import router from '@/router'
+import { computed, onMounted, ref, watch } from 'vue'
+import { RouterView } from 'vue-router'
+import MainMenu from './components/TheMainMenu/MainMenu.vue'
+import Button from 'primevue/button'
+import Menu from 'primevue/menu'
+
+const showFooter = ref()
+const showContent = ref()
+const isSaveRecipeButtonClicked = ref()
+
+const routeName = computed(() => router.currentRoute.value.fullPath)
+
+const menu = ref()
+const items = ref([
+  {
+    items: [
+      {
+        label: 'My Recipes',
+        icon: 'pi pi-bookmark',
+        command: () => {
+          router.push('/my-recipes')
+        }
+      },
+      {
+        label: 'Favourites',
+        icon: 'pi pi-heart',
+        command: () => {
+          router.push('/liked-recipes')
+        }
+      },
+      {
+        label: 'Shopping List',
+        icon: 'pi pi-shopping-cart',
+        command: () => {
+          router.push('/shopping-list')
+        }
+      }
+    ]
+  }
+])
+
+const toggle = (event: any) => {
+  menu.value.toggle(event)
+}
+
+watch(routeName, () => {
+  getPath()
+})
+
+watch(isSaveRecipeButtonClicked, () => {
+  console.log('hello')
+})
+
+onMounted(() => {
+  getPath()
+})
+
+const goBack = () => {
+  router.push('/login')
+}
+
+const getPath = () => {
+  showFooter.value = routeName.value !== '/login'
+  showContent.value = localStorage.userID !== -1 || routeName.value === '/login'
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div class="menu">
+    <Button
+      type="button"
+      class="pi pi-bars"
+      @click="toggle"
+      aria-haspopup="true"
+      aria-controls="overlay_menu"
+    />
+    <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+  </div>
+  <div class="main">
+    <RouterView v-if="showContent" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+    <div class="error" v-else>
+      <h2>You are not logged in!</h2>
+      <h3>Go back!</h3>
+      <Button
+        icon="pi pi-arrow-left"
+        rounded
+        aria-label="Go back"
+        class="go-back-button"
+        @click="goBack()"
+      />
     </div>
-  </header>
-
-  <RouterView />
+  </div>
+  <div class="footer" v-if="showFooter && showContent">
+    <MainMenu @save-recipe-button-clicked="isSaveRecipeButtonClicked = true" />
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<style lang="scss" scoped>
+.go-back-button {
+  background: #ebb222;
+  border: none;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  height: 100vh;
 }
 </style>
