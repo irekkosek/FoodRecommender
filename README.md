@@ -23,11 +23,31 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
+for development with npm
 ```sh
 npm install
 ```
 
+for development with python
+```sh
+pip install -r requirements.txt
+prisma generate
+```
+you can read more about prisma [here](https://prisma-client-py.readthedocs.io/en/stable/getting_started/setup/)
+
+to seed the database
+```sh
+python import_recipes.py
+```
+you can check the database with [prisma studio](https://www.prisma.io/studio)
+just run
+```sh
+prisma studio
+```
+
 ### Compile and Hot-Reload for Development
+
+Vue:
 
 ```sh
 npm run dev
@@ -50,3 +70,14 @@ npm run test:unit
 ```sh
 npm run lint
 ```
+Python:
+
+to run the server
+```sh
+uvicorn main:app --reload
+```
+you can find additional information about it [here](https://fastapi.tiangolo.com/tutorial/first-steps/)
+
+you can also find: 
+automatic interactive API documentation (provided by Swagger UI): [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
+alternative automatic documentation (provided by ReDoc): [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc).
