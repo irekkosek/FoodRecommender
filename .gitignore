@@ -8,3 +8,5 @@ server/restOfDatabaseWithoutIds.csv
 server/result.csv
 server/chosenByUser.csv
 server/chosenByUserWithoutIds.csv
+server/all_db_recipes.csv
+server/userfavs.csv
