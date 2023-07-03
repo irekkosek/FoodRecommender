@@ -5,6 +5,7 @@ from numpy import rec, where
 from prisma import Prisma
 from fastapi import FastAPI
 import json
+import pandas as pd
 
 app = FastAPI()
 
@@ -23,11 +24,20 @@ async def root():
     await db.disconnect()
 
     # convert found : List[RECPIES] to json
-    found_json = []
-    for recipe in found:
-        found_json.append(recipe.json())
+    # found_json = []
+    found_json, df = list_recipes_to_json_df(found)
+    print(df.head())
     
     return found_json
+
+def list_recipes_to_json_df(found):
+    found_json = "["
+    for recipe in found:
+        # found.__dict__
+        found_json += f'{recipe.json()},'
+    found_json = found_json[:-1] + "]"
+    df = pd.read_json(found_json)
+    return found_json,df
 
 
 #python3 main.py
