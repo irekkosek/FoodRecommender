@@ -1,3 +1,18 @@
-add index option to output_id for pseudo progress bar 
+[ ] add index option to output_id for pseudo progress bar 
 after some point move main.py to examples folder \
 and start developing a new main.py for the project
+
+[x] add env to prisma schema `  url= env("DATABASE_URL")`
+[x] add .env file to server folder with DATABASE_URL="postgresql://localhost/?user=postgres&password=root - for local development"
+[x] add env to docker-compose `DATABASE_URL: "postgresql://postgres:root@db:5432"` - for docker development
+[x] add env to docker-compose `entrypoint: ${ENTRYPOINT}` - for docker development
+<!-- add env to dockerfile `ENV DATABASE_URL="postgresql://postgres:root@db:5432"`
+add env to main.py `DATABASE_URL = os.getenv("DATABASE_URL")`
+add env to prisma/.env `DATABASE_URL="postgresql://postgres:root@db:5432"` -->
+[x] add healthcheck for db service in docker-compose
+
+[x] add healthcheck endpoint to fastapi
+[ ] add healthcheck for server service in docker-compose
+[ ] add depend on server healthcheck for app service in docker-compose
+
+
