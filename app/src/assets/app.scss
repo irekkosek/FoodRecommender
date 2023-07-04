@@ -118,6 +118,14 @@ h3 {
     font-size: 0.8rem;
   }
 }
+
+.p-rating-cancel-item {
+  display: none;
+}
+.p-rating-icon {
+  color: rgb(255, 206, 81) !important;
+}
+
 .p-button {
   color: white;
   background-color: $YELLOW !important;

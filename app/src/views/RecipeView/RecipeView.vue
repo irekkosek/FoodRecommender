@@ -116,14 +116,6 @@ const goToSource = (url: string) => {
     <Loader v-else />
   </div>
 </template>
-<style lang="scss">
-.p-rating-cancel-item {
-  display: none;
-}
-.p-rating-icon {
-  color: rgb(255, 206, 81) !important;
-}
-</style>
 
 <style lang="scss" scoped>
 .recipe {
