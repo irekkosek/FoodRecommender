@@ -17,6 +17,6 @@ onMounted(() => {
 
 <template>
   <div>
-    <RecipeForm v-if="recipe" :pageTitle="`Edit ${recipe.title} recipe`" />
+    <RecipeForm v-if="recipe" :pageTitle="`Edit ${recipe.name} recipe`" />
   </div>
 </template>

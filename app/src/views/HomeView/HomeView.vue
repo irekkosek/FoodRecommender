@@ -2,18 +2,20 @@
 import CarouselOfRecipes from '@/components/TheCarousel/CarouselOfRecipes.vue'
 import { onMounted, ref } from 'vue'
 import Divider from 'primevue/divider'
-import { RecipesData } from '../database'
 import Loader from '@/components/common/Loader.vue'
+import axios from 'axios'
 
 const items = ref()
 const userName = ref()
 
-onMounted(() => {
-  setTimeout(() => {
-    RecipesData.getProducts().then((data: any) => (items.value = data))
-    // name should be taken from api
-    userName.value = 'Cukinia'
-  }, 2000)
+onMounted(async () => {
+  items.value = await axios
+    .get('http://127.0.0.1:8000/recipes')
+    .then((response) => {
+      return JSON.parse(response.data)
+    })
+    .catch((err) => console.log(err))
+  userName.value = 'Cukinia'
 })
 
 const randomEmojis = ['😃', '😍', '😎', '😋', '😉', '👇']

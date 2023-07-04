@@ -31,7 +31,7 @@ watch(
   (newVal) => {
     if (newVal) {
       if (
-        !title.value ||
+        !name.value ||
         !(ingredients.value.length > 0) ||
         !(tags.value.length > 0) ||
         !(stepsValues.value.length > 0) ||
@@ -44,7 +44,7 @@ watch(
   }
 )
 
-const title = ref(null)
+const name = ref(null)
 const ingredients = ref(['milk'])
 const tags = ref(['asian', 'easy'])
 const stepsValues = ref(['Add more steps!'])
@@ -52,7 +52,7 @@ const enteredStep = ref('')
 const enteredPrepTime = ref()
 
 // const formFields = ref([
-//   {name: 'title', value: null},
+//   {name: 'name', value: null},
 //   {name: 'ingredients', value: ['milk']},
 //   {name: 'tags', value: ['asian', 'easy']},
 //   {name: 'stepsValues', value: ['Add more steps!']},
@@ -80,7 +80,7 @@ onMounted(() => {
     ({ id }) => id == (route.query.id as unknown as number)
   )
   const r = recipe.value
-  title.value = r.title
+  name.value = r.name
   ingredients.value = r.ingredients
   stepsValues.value = r.steps
   tags.value = r.tags
@@ -93,8 +93,8 @@ onMounted(() => {
     <Divider />
     <div class="form__container">
       <span class="p-float-label">
-        <InputText id="username" v-model="title" :class="title ?? `p-invalid`" />
-        <label for="username">Recipe title</label>
+        <InputText id="username" v-model="name" :class="name ?? `p-invalid`" />
+        <label for="username">Recipe name</label>
       </span>
       <span class="p-float-label">
         <Chips id="chips" v-model="ingredients" separator=" " :class="ingredients ?? `p-invalid`" />

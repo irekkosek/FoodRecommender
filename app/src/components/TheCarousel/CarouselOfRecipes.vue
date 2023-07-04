@@ -24,13 +24,13 @@ const goToRecipe = (recipeId: number, isOwned: boolean) => {
   <div class="carousel__wrapper">
     <div
       class="recipe"
-      v-for="{ id, imageURL, title, description, isOwned } in recipes"
+      v-for="{ id, thumbnail_url, name, description, isOwned } in recipes"
       @click="goToRecipe(id, isOwned)"
     >
       <div v-if="isOwned" class="recipe__owned-marker"></div>
-      <div class="recipe__image" :style="`background-image: url(${imageURL});`" />
+      <div class="recipe__image" :style="`background-image: url(${thumbnail_url});`" />
       <div class="recipe__text">
-        <span class="recipe__title">{{ title }}</span>
+        <span class="recipe__title">{{ name }}</span>
         <span class="recipe__desc">{{ description }}</span>
       </div>
     </div>

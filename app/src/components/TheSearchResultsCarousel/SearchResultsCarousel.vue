@@ -113,16 +113,16 @@ watch(sorting, () => {
       <div class="search-results-carousel__wrapper">
         <div
           class="recipe"
-          v-for="{ id, imageURL, title, tags, cuisines, isOwned, isFavourite } in recipes"
+          v-for="{ id, thumbnail_url, name, tags, cuisines, isOwned, isFavourite } in recipes"
           @click="goToRecipe(id, isOwned)"
         >
           <div v-if="isOwned" class="recipe__owned-marker"></div>
           <div
             :class="`recipe__favourite-marker pi ${isFavourite ? 'pi-heart-fill' : 'pi-heart'}`"
           />
-          <div class="recipe__image" :style="`background-image: url(${imageURL});`">
+          <div class="recipe__image" :style="`background-image: url(${thumbnail_url});`">
             <div class="recipe__image__overlay">
-              <span class="recipe__title">{{ title }}</span>
+              <span class="recipe__title">{{ name }}</span>
               <div class="recipe__tags">
                 <div class="recipe__tags__tags">
                   <span v-for="tag in tags">#{{ tag }} </span>
