@@ -2,7 +2,8 @@
 datasource db {
     provider = "postgresql"
     // url      = "postgresql://localhost/?user=postgres&password=root"
-    url      = "postgresql://postgres:root@localhost:5432"
+    // url      = "postgresql://postgres:root@db:5432"
+    url      = env("DATABASE_URL")
 }
 
 // generator
