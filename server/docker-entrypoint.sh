@@ -6,6 +6,8 @@ CONTAINER_ALREADY_STARTED="/.container_already_started"
 if [ ! -e $CONTAINER_ALREADY_STARTED ]; then
     touch $CONTAINER_ALREADY_STARTED
     echo "-- First container startup --"
+    # echo "-- Running prisma migrate deploy --"
+    # prisma migrate deploy --preview-feature
     echo "-- Running prisma db push --"
     prisma db push --force-reset --accept-data-loss 
     echo "-- Running prisma generate --"

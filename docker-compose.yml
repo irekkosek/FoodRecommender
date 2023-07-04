@@ -23,7 +23,7 @@ services:
     volumes:
       - ./server:/server
     ports:
-      - "5000:5000"
+      - "8000:8000"
     networks:
       - db
     depends_on:
