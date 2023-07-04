@@ -120,7 +120,7 @@ h3 {
 }
 
 .p-rating-cancel-item {
-  display: none;
+  display: none !important;
 }
 .p-rating-icon {
   color: rgb(255, 206, 81) !important;
