@@ -6,19 +6,22 @@ import Checkbox from 'primevue/checkbox'
 import Button from 'primevue/button'
 import ToggleButton from 'primevue/togglebutton'
 import Loader from '@/components/common/Loader.vue'
+import { useSetSavedIngredientsStore } from '@/stores/setSavedIngredients'
 
 const route = useRoute()
 const recipe = ref()
 const checkedIngredients = ref()
 const isLiked = ref(false)
+const setSavedIngredients = useSetSavedIngredientsStore()
 
 watch(checkedIngredients, (newVal) => {
-  localStorage.ingredients = newVal
+  setSavedIngredients.setIngredients(newVal)
 })
 
 onMounted(() => {
-  checkedIngredients.value = localStorage.ingredients
-    ? localStorage.ingredients.split(',').filter((ingredient: string) => ingredient !== '')
+  const ing = setSavedIngredients.getIngredients()
+  checkedIngredients.value = ing
+    ? ing.split(',').filter((ingredient: string) => ingredient !== '')
     : []
 
   // request for api by id, simulating for now

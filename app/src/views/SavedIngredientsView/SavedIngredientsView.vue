@@ -2,20 +2,22 @@
 import { onMounted, ref, watch } from 'vue'
 import Checkbox from 'primevue/checkbox'
 import Divider from 'primevue/divider'
+import { useSetSavedIngredientsStore } from '@/stores/setSavedIngredients'
+
+const setSavedIngredients = useSetSavedIngredientsStore()
 
 const checkedIngredients = ref()
-const ingredients = ref(localStorage.ingredients ?? localStorage.ingredients.split(','))
 const isListEmpty = ref()
 
-watch(ingredients, (newVal) => {
-  localStorage.ingredients = newVal
+watch(checkedIngredients, (newVal) => {
+  setSavedIngredients.setIngredients(newVal)
 })
 
 onMounted(() => {
-  if (!localStorage.ingredients) return
-  checkedIngredients.value = localStorage.ingredients
-    .split(',')
-    .filter((ingredient: string) => ingredient !== '')
+  const ing = setSavedIngredients.getIngredients()
+  checkedIngredients.value = ing
+    ? ing.split(',').filter((ingredient: string) => ingredient !== '')
+    : []
   isListEmpty.value = checkedIngredients.value.length > 0
 })
 </script>
@@ -27,7 +29,7 @@ onMounted(() => {
     <div v-if="isListEmpty" class="ingredients-section__list">
       <div v-for="(value, index) in checkedIngredients" :key="index">
         <Checkbox
-          v-model="ingredients"
+          v-model="checkedIngredients"
           :inputId="`ingredient-${index}`"
           :name="value"
           :value="value"
