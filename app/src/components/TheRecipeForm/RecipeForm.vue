@@ -35,7 +35,8 @@ watch(
         !(ingredients.value.length > 0) ||
         !(tags.value.length > 0) ||
         !(stepsValues.value.length > 0) ||
-        !enteredPrepTime.value
+        !enteredPrepTime.value ||
+        !enteredImageURL.value
       )
         isFormValid.value = false
       else isFormValid.value = true
@@ -50,6 +51,7 @@ const tags = ref(['asian', 'easy'])
 const stepsValues = ref(['Add more steps!'])
 const enteredStep = ref('')
 const enteredPrepTime = ref()
+const enteredImageURL = ref()
 
 // const formFields = ref([
 //   {name: 'name', value: null},
@@ -84,6 +86,7 @@ onMounted(() => {
   ingredients.value = r.ingredients
   stepsValues.value = r.steps
   tags.value = r.tags
+  enteredImageURL.value = r.thumbnail_url
 })
 </script>
 
@@ -99,6 +102,14 @@ onMounted(() => {
       <span class="p-float-label">
         <Chips id="chips" v-model="ingredients" separator=" " :class="ingredients ?? `p-invalid`" />
         <label for="chips">Ingredients</label>
+      </span>
+      <span class="p-float-label">
+        <InputText
+          input-id="image-url"
+          v-model="enteredImageURL"
+          :class="enteredImageURL ?? `p-invalid`"
+        />
+        <label for="image-url">Image URL</label>
       </span>
       <div class="steps__container">
         <label>Steps</label>
