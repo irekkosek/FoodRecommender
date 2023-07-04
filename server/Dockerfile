@@ -7,4 +7,4 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN  chmod +x /docker-entrypoint.sh
 COPY . .
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["uvicorn", "main:app", "--host","0.0.0.0", "--port","5000"]
+CMD ["uvicorn", "main:app", "--host","0.0.0.0", "--port","8000"]
