@@ -6,8 +6,9 @@ import { RouterView } from 'vue-router'
 import MainMenu from './components/TheMainMenu/MainMenu.vue'
 import Button from 'primevue/button'
 import Menu from 'primevue/menu'
+import { useUserLoginStore } from './stores/userLogin'
 
-const showFooter = ref()
+const showFooterAndHeader = ref()
 const showContent = ref()
 const isSaveRecipeButtonClicked = ref()
 
@@ -37,6 +38,13 @@ const items = ref([
         command: () => {
           router.push('/shopping-list')
         }
+      },
+      {
+        label: 'Logout',
+        icon: 'pi pi-power-off',
+        command: () => {
+          router.push('/login')
+        }
       }
     ]
   }
@@ -63,13 +71,13 @@ const goBack = () => {
 }
 
 const getPath = () => {
-  showFooter.value = routeName.value !== '/login'
-  showContent.value = localStorage.userID !== -1 || routeName.value === '/login'
+  showFooterAndHeader.value = routeName.value !== '/login'
+  showContent.value = useUserLoginStore().getUserNick() !== '' || routeName.value === '/login'
 }
 </script>
 
 <template>
-  <div class="menu">
+  <div class="menu" v-if="showFooterAndHeader && showContent">
     <Button
       type="button"
       class="pi pi-bars"
@@ -94,7 +102,7 @@ const getPath = () => {
       />
     </div>
   </div>
-  <div class="footer" v-if="showFooter && showContent">
+  <div class="footer" v-if="showFooterAndHeader && showContent">
     <MainMenu @save-recipe-button-clicked="isSaveRecipeButtonClicked = true" />
   </div>
 </template>

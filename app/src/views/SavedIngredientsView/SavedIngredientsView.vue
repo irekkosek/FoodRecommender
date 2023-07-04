@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import Checkbox from 'primevue/checkbox'
+import Divider from 'primevue/divider'
 
 const checkedIngredients = ref()
-const ingredients = ref(localStorage.ingredients.split(','))
+const ingredients = ref(localStorage.ingredients ?? localStorage.ingredients.split(','))
 const isListEmpty = ref()
 
 watch(ingredients, (newVal) => {
@@ -11,6 +12,7 @@ watch(ingredients, (newVal) => {
 })
 
 onMounted(() => {
+  if (!localStorage.ingredients) return
   checkedIngredients.value = localStorage.ingredients
     .split(',')
     .filter((ingredient: string) => ingredient !== '')
@@ -21,6 +23,7 @@ onMounted(() => {
 <template>
   <div>
     <h2>Shopping list</h2>
+    <Divider />
     <div v-if="isListEmpty" class="ingredients-section__list">
       <div v-for="(value, index) in checkedIngredients" :key="index">
         <Checkbox

@@ -85,24 +85,4 @@ const changeKeywordFocus = (e: any) => {
   background: #ebb222;
   border: none;
 }
-// .sidebar {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   background-color: white;
-//   width: 100%;
-//   height: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-// }
-// .v-enter-active,
-// .v-leave-active {
-//   transition: opacity 0.5s ease;
-// }
-// .v-enter-from,
-// .v-leave-to {
-//   opacity: 0;
-// }
 </style>

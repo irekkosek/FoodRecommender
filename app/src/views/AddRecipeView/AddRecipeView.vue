@@ -5,7 +5,7 @@ import { ref, watch } from 'vue'
 const isSaveRecipeButtonClicked = ref()
 
 watch(isSaveRecipeButtonClicked, () => {
-  console.log('hi')
+  console.log('Create new record in database')
 })
 </script>
 

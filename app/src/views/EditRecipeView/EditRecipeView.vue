@@ -12,6 +12,7 @@ onMounted(() => {
     ({ id }) => id == (route.query.id as unknown as number)
   )
 })
+// get record from api
 </script>
 
 <template>

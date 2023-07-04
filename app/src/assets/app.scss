@@ -51,11 +51,11 @@ $YELLOW: rgb(255, 206, 81);
   padding: 25px;
 }
 h2 {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   text-align: center;
 }
 h3 {
-  font-weight: normal !important;
+  font-weight: 300 !important;
 }
 
 .form__container {
@@ -99,7 +99,7 @@ h3 {
   }
 }
 .p-sidebar {
-  height: 30rem !important;
+  height: fit-content !important;
   border-radius: 2rem 2rem 0 0;
 }
 .p-radiobutton-box.p-highlight {

@@ -13,8 +13,6 @@ import 'primeicons/primeicons.css'
 
 export const app = createApp(App)
 
-localStorage.userID = 1 // should be stored somewhere else - after site reload there is no access
-
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue)

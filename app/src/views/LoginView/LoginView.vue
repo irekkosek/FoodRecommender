@@ -1,20 +1,24 @@
 <script setup lang="ts">
-import { app } from '../../main'
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
 import Button from 'primevue/button'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import router from '../../router'
+import { useUserLoginStore } from '@/stores/userLogin'
 
 const mockedUser = { nick: 'cukinia', password: 'helloworld' }
 
 const nick = ref()
 const password = ref()
 
+onMounted(() => {
+  useUserLoginStore().setUserNick('')
+})
+
 const updateUserID = () => {
   // check if nick and password are in database, then
   if (!(nick.value === mockedUser.nick && password.value === mockedUser.password)) return
-  localStorage.userID = nick.value
+  useUserLoginStore().setUserNick(nick.value)
   router.push('/')
 }
 </script>

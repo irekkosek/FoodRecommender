@@ -21,7 +21,7 @@ import { LottieAnimation } from 'lottie-web-vue'
   justify-content: center;
   min-height: 100vh;
   min-width: 100vw;
-  background-color: rgba(255, 255, 255, 0.833);
+  background-color: rgba(255, 255, 255, 0.515);
   z-index: 1000;
   div {
     width: 200px;

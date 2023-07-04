@@ -5,6 +5,7 @@ import { onMounted, ref, watch } from 'vue'
 import Checkbox from 'primevue/checkbox'
 import Button from 'primevue/button'
 import ToggleButton from 'primevue/togglebutton'
+import Loader from '@/components/common/Loader.vue'
 
 const route = useRoute()
 const recipe = ref()
@@ -17,13 +18,18 @@ watch(checkedIngredients, (newVal) => {
 
 onMounted(() => {
   checkedIngredients.value = localStorage.ingredients
-    .split(',')
-    .filter((ingredient: string) => ingredient !== '')
-  recipe.value = RecipesData.getProductsData().find(
-    ({ id }) => id == (route.query.id as unknown as number)
-  )
-  if (!recipe.value.isFavourite) return
-  isLiked.value = recipe.value.isFavourite
+    ? localStorage.ingredients.split(',').filter((ingredient: string) => ingredient !== '')
+    : []
+
+  // request for api by id, simulating for now
+  setTimeout(() => {
+    recipe.value = RecipesData.getProductsData().find(
+      ({ id }) => id == (route.query.id as unknown as number)
+    )
+
+    if (!recipe.value.isFavourite) return
+    isLiked.value = recipe.value.isFavourite
+  }, 1000)
 })
 
 const goToSource = (url: string) => {
@@ -87,6 +93,7 @@ const goToSource = (url: string) => {
         />
       </div>
     </div>
+    <Loader v-else />
   </div>
 </template>
 
