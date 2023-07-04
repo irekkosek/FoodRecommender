@@ -1,10 +1,14 @@
 import asyncio
+from doctest import debug
 from os import name
 import re
 from numpy import rec
 from prisma import Prisma, types
 import pandas as pd
 from pathlib import Path
+import sys
+
+args = sys.argv
 
 async def import_recpies(recipe: dict, verbose:bool=False, debug:bool=False, output_id:bool=False) -> None:
     db = Prisma()
@@ -142,10 +146,21 @@ df = pd.read_csv(fr'{dataset_abs_path}')
 
 rows = df.itertuples() #(index=False)
 recipe = {}
+debug = False
+if 'debug' in args or '--debug' in args:
+    debug = True
+short = False
+counter = 0
+if 'short' in args or '--short' in args:
+    short = True
 
 for row in rows:
     # change row into dict
     recipe = row._asdict() 
+    if short:
+        counter+=1
+        if counter > 100:
+            break
     asyncio.run(import_recpies(recipe, output_id=True))
  
 print("imported recipes complete")

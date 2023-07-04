@@ -13,15 +13,22 @@ services:
       - db
 
   server:
+    environment:
+      DATABASE_URL: "postgresql://postgres:root@db:5432"
+    entrypoint: ${ENTRYPOINT}
+    command: ${CMD}
     build: ./server
-    command: python app.py
+    # entrypoint: [./docker-entrypoint.sh]
+    # command: ["uvicorn", "main:app", "--host","127.0.0.1", "--port","5000", "--reload"]
     volumes:
       - ./server:/server
     ports:
       - "5000:5000"
-    depends_on:
+    networks:
       - db
-
+    depends_on:
+      db:
+        condition: service_healthy
   db:
     image: postgres
     environment:
@@ -36,6 +43,12 @@ services:
     networks:
       - db
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 1s
+      timeout: 4s
+      retries: 5
+
 
   pgadmin:
     image: dpage/pgadmin4

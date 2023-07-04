@@ -34,18 +34,33 @@ async def root():
     found = await db.recipes.find_many(where={
         'OR' : [
             {'id': 1},
-            {'id': 27}
+            {'id': 27},
+            {'id': 868}
             ]
         }
     )
+
     await db.disconnect()
 
+    if found.__len__() > 0:
+        found_json, df = list_recipes_to_json_df(found)
+        print(df.head())
+    else:
+        found_json = "[]"
+    return found_json
     # convert found : List[RECPIES] to json
     # found_json = []
-    found_json, df = list_recipes_to_json_df(found)
-    print(df.head())
-    
+    # for recipe in found:
+        # print(f'found recipe: {recipe.json(indent=2)}')
+    # if found is not None:
+    #     found_json, df = list_recipes_to_json_df(found)
+        # print(df.head())
+    # else:
+    #     found_json = "[]"
     return found_json
+@app.get("/healthcheck")
+async def healthcheck():
+    return "healthy"
 
 @app.get("/recipes")
 async def recipes():
