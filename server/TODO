@@ -1,5 +1,5 @@
-[ ] add index option to output_id for pseudo progress bar 
-after some point move main.py to examples folder \
+[x] add index option to output_id for pseudo progress bar 
+[ ]after some point move main.py to examples folder \
 and start developing a new main.py for the project
 
 [x] add env to prisma schema `  url= env("DATABASE_URL")`
@@ -17,7 +17,7 @@ add env to prisma/.env `DATABASE_URL="postgresql://postgres:root@db:5432"` -->
 
 [x] fix import_recipes.py __main__
 [x] change get /createrecipe to post /createrecipe
-[] add static type checking for return statements in
+[x] add static type checking for return statements in
 /recipes/{recipe_id} and /recipes endpoints (will now always return proper json with a Recipe)
 [] add .venv creation to entypoint.sh (will now populate server/.venv with all dependencies)
 [ ] fix /createrecepie partialtype in partialtypes // what i probably meant here is that when 
