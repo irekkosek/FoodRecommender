@@ -1,10 +1,10 @@
 import asyncio
-from doctest import debug
-from os import name
-from pyexpat import model
-import re
-from turtle import mode
-from numpy import rec
+#from doctest import debug
+#from os import name
+#from pyexpat import model
+#import re
+# from turtle import mode
+#from numpy import rec
 from prisma import Prisma, types, bases, client, builder, models
 import pandas as pd
 from pathlib import Path
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     dataset_abs_path = (mod_path / filename).resolve()
     df = pd.read_csv(fr'{dataset_abs_path}')
 
-    rows = df.itertuples() #(index=False)
+    rows = df.itertuples(index=False)
     recipe = {}
     debug = False
     if 'debug' in args or '--debug' in args:
