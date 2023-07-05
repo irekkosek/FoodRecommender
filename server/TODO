@@ -15,6 +15,7 @@ add env to prisma/.env `DATABASE_URL="postgresql://postgres:root@db:5432"` -->
 [ ] add healthcheck for server service in docker-compose
 [ ] add depend on server healthcheck for app service in docker-compose
 
+[  ] fix import_recipes.py __main__
 [] change get /createrecipe to post /createrecipe
 [] add static type checking for return statements in
 /recipes/{recipe_id} and /recipes endpoints (will now always return proper json with a Recipe)
