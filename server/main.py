@@ -65,31 +65,22 @@ async def root():
 async def healthcheck():
     return "healthy"
 
-@app.get("/recipes")
+@app.get("/recipes", response_model=list[models.RECIPES])
 async def recipes():
+    found_json = "[]"
     db = Prisma()
     await db.connect()
     found = await db.recipes.find_many()
     await db.disconnect()
+    return found
 
-    # convert found : List[RECPIES] to json
-    found_json, df = list_recipes_to_json_df(found)
-    print(df.head())
-    
-    return found_json
-#TODO: switch to response_model=models.RECIPES
-@app.get("/recipes/{recipe_id}")#, response_model=models.RECIPES)
+@app.get("/recipes/{recipe_id}", response_model=list[models.RECIPES])#, response_model=models.RECIPES)
 async def recipesId(recipe_id: int):
     db = Prisma()
     await db.connect()
     found = await db.recipes.find_many(where={'id': recipe_id})
     await db.disconnect()
-    # convert found : List[RECPIES] to json
-    # found_json = []
-    found_json, df = list_recipes_to_json_df(found)
-    print(df.head())
-    
-    return found_json
+    return found
 @app.get("/recommend")
 async def emptyRecommend():
     message="Please enter a user id after /recommend/"
@@ -131,7 +122,7 @@ async def RunRecommend(user_id: int, debug=False, verbose=True):
     print(f'recommended ids:\n {prettifyJson(recommendedIdsJson)}') if verbose else None
     return recommendedIdsJson
 
-# @app.post("/createRecipe")
+
 @app.post("/createRecipe", response_model=models.RECIPES)
 async def createRecipe(recipe: RECIPESWithoutId):#(recipejson: str):
 
