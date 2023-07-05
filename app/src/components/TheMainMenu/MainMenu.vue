@@ -72,15 +72,15 @@ const menuConfigurations: menuConf[] = [
   },
   {
     path: '/my-recipes',
-    buttons: ['Go Back', 'Add Recipe']
+    buttons: ['Go Back', 'Home', 'Add Recipe']
   },
   {
     path: '/liked-recipes',
-    buttons: ['Go Back', 'Add Recipe']
+    buttons: ['Go Back', 'Home', 'Add Recipe']
   },
   {
     path: '/shopping-list',
-    buttons: ['Go Back']
+    buttons: ['Home', 'Go Back']
   }
 ]
 
