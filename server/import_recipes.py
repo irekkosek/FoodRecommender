@@ -1,4 +1,5 @@
 import asyncio
+from click import progressbar
 #from doctest import debug
 #from os import name
 #from pyexpat import model
@@ -14,7 +15,9 @@ import json
 
 args = sys.argv
 
-async def import_recipes(recipe: dict | RECIPESWithoutId , verbose:bool=False, debug:bool=False, output_id:bool=False) -> models.RECIPES:
+async def import_recipes(recipe: dict | RECIPESWithoutId ,
+    verbose:bool=False, debug:bool=False, output_id:bool=False, progress:bool=False,
+    progressbar: str = "") -> models.RECIPES:
     db = Prisma()
     await db.connect()
     if type(recipe) is dict:
@@ -39,7 +42,10 @@ async def import_recipes(recipe: dict | RECIPESWithoutId , verbose:bool=False, d
         for found_recipe in found:
             print(f'found recipe: {found_recipe.json(indent=2)}')
     if output_id:
-        print(f'{new_recipe.id}')
+        if (progress):
+            print(f'{progressbar} {new_recipe.id}')
+        else:
+            print(f'{new_recipe.id}')
     await db.disconnect()
     return new_recipe
 
@@ -49,25 +55,27 @@ if __name__ == '__main__':
     dataset_abs_path = (mod_path / filename).resolve()
     df = pd.read_csv(fr'{dataset_abs_path}')
 
+    df_len = len(df.index)
     rows = df.itertuples(index=False)
     recipe = {}
     debug = False
     if 'debug' in args or '--debug' in args:
         debug = True
     short = False
-    counter = 0
+    counter = 1
     if 'short' in args or '--short' in args:
         short = True
+        df_len = 100
 
     for row in rows:
         # change row into dict
         recipe = row._asdict() 
         if short:
-            counter+=1
             if counter > 100:
                 break
-        asyncio.run(import_recipes(recipe, output_id=True))
-    
+        asyncio.run(import_recipes(recipe, output_id=True, progress=True, progressbar=str(f'{counter}/{df_len}:')))
+        counter+=1
+
     print("imported recipes complete")
     
 
