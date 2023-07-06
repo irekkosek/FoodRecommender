@@ -323,6 +323,18 @@ async def deleteLikedRecipes(user_id: int, recipe_id: int):
     await db.disconnect()
     return userfavs
 
+@app.get("/delete/user/{user_id}/owns/{recipe_id}")
+async def deleteOwnedRecipes(user_id: int, recipe_id: int):
+    db = Prisma()
+    await db.connect()
+    userowns = await db.user_owns_recipes.delete(
+        where={
+            "USER_id_RECIPE_id": {"RECIPE_id": recipe_id, "USER_id": user_id}
+        }
+    )
+    await db.disconnect()
+    return userowns
+
 
 
 #python3 main.py
