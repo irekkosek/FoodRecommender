@@ -241,7 +241,7 @@ async def update(recipe: Recipe, id: int):
     return recipe
 
 @app.post("/recipes/delete/{recipe_id}")
-async def delete(recipe_id: int, recipe: Recipe):
+async def delete(recipe_id: int):
     db = Prisma()
     await db.connect()
     recipe =await db.recipes.delete(
