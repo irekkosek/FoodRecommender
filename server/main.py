@@ -20,6 +20,8 @@ origins = [
 
 app = FastAPI()
 
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -27,6 +29,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 def list_recipes_to_json_df(found):
     found_json = "["
@@ -98,6 +101,72 @@ async def recipesId(recipe_id: int):
 async def emptyRecommend():
     message="Please enter a user id after /recommend/"
     return message
+
+@app.get("/search/{keyword}")
+async def recipes(keyword: str):
+    db = Prisma()
+    await db.connect()
+    all_recipes = await db.recipes.find_many()  # Pobierz wszystkie przepisy z bazy danych
+    await db.disconnect()
+
+    # Filtruj przepisy, aby zwrócić tylko te, których id zawiera keyword
+    found = [recipe for recipe in all_recipes if str(keyword.lower()) in str(recipe.name.lower())]
+
+    # Konwertuj found : List[RECIPES] na JSON
+    found_json, df = list_recipes_to_json_df(found)
+    print(df.head())
+
+    return found_json
+
+
+@app.get("/search/{keyword}/{sorting}")
+async def recipes(keyword: str, sorting: str):
+    db = Prisma()
+    await db.connect()
+    all_recipes = await db.recipes.find_many(order={sorting.lower(): 'desc'})  # Pobierz wszystkie przepisy z bazy danych
+    await db.disconnect()
+
+    # Filtruj przepisy, aby zwrócić tylko te, których id zawiera keyword
+    found = [recipe for recipe in all_recipes if str(keyword.lower()) in str(recipe.name.lower())]
+
+    # Konwertuj found : List[RECIPES] na JSON
+    found_json, df = list_recipes_to_json_df(found)
+    print(df.head())
+
+    return found_json
+
+
+
+@app.get("/search/{keyword}/{sorting}/{filtering}")
+async def recipes(keyword: str, sorting: str, filtering: str, criteria: int):
+    db = Prisma()
+    await db.connect()
+    all_recipes = await db.recipes.find_many(order={sorting: 'desc'},where={filtering:{'gt': criteria}})  
+    await db.disconnect()
+
+    
+    found = [recipe for recipe in all_recipes if str(keyword.lower()) in str(recipe.name.lower())]
+
+    found_json, df = list_recipes_to_json_df(found)
+    print(df.head())
+
+    return found_json
+
+@app.get("/liked-recipes/{user_id}")
+async def getLikedRecipes(user_id: int):
+    db = Prisma()
+    await db.connect()
+    userfavs = await db.user_likes_recipes.find_many(
+        where={'USER_id': user_id}
+    )
+    userfavs_ids = [fav.RECIPE_id for fav in userfavs]
+    user_db_recipes = await db.recipes.find_many(where={
+        'id': {
+            'in': userfavs_ids
+        }
+    })
+    await db.disconnect()
+    return user_db_recipes
 
 
 @app.get("/recommend/{user_id}")
