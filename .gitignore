@@ -1,4 +1,5 @@
 server/.venv/
+server/venv
 .vscode
 **/__pycache__
 server/recomendations.csv

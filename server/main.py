@@ -108,7 +108,10 @@ async def recipebyKeyword(keyword: str):
     await db.connect()
     found = await db.recipes.find_many(
         where={
-            "name": keyword
+            "name": {
+                "contains": keyword,
+                "mode": "insensitive"
+            } 
         }
     )  
     await db.disconnect()
@@ -116,20 +119,21 @@ async def recipebyKeyword(keyword: str):
 
 
 @app.get("/search/{keyword}/{sorting}",response_model=list[models.RECIPES])
-async def recipesbyKeywordWithSorting(keyword: str, sorting: str):
+async def recipesbyKeywordWithSorting(keyword: str, sorting: types.RECIPESOrderByInput):
     db = Prisma()
     await db.connect()
+    keyword = keyword.lower()
     found = await db.recipes.find_many(
         where={
-            "name": keyword
-        },
-        order={
-            'name': 'asc'
+            "name": {
+                "contains": keyword,
+                "mode": "insensitive"
+            } 
         }
+        order=sorting
     )  
     await db.disconnect()
     return found
-
 
 
 
