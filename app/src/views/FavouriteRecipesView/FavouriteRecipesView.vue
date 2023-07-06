@@ -2,15 +2,21 @@
 import SearchResultCarousel from '@/components/TheSearchResultsCarousel/SearchResultsCarousel.vue'
 import Divider from 'primevue/divider'
 import { onMounted, ref } from 'vue'
-import { RecipesData } from '../database'
 import Loader from '@/components/common/Loader.vue'
+import axios from 'axios'
+import { useUserLoginStore } from '@/stores/userLogin'
+
+const userLogin = useUserLoginStore()
 
 const items = ref()
 
-onMounted(() => {
-  setTimeout(() => {
-    RecipesData.getProducts().then((data: any) => (items.value = data))
-  }, 2000)
+onMounted(async () => {
+  items.value = await axios
+    .get(`http://127.0.0.1:8000/liked-recipes/${userLogin.getUserId()}`)
+    .then((response) => {
+      return response.data
+    })
+    .catch((err) => console.log(err))
 })
 </script>
 
@@ -18,7 +24,7 @@ onMounted(() => {
   <div v-if="items">
     <h2>Favourites</h2>
     <Divider />
-    <SearchResultCarousel :items="items" :recipes-to-show="'favourite'" />
+    <SearchResultCarousel :items="items" />
   </div>
   <Loader v-else />
 </template>

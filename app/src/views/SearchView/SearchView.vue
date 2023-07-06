@@ -30,7 +30,7 @@ const changeKeywordFocus = (e: any) => {
 
 <template>
   <div>
-    <h2>What dou you want to find?</h2>
+    <h2>What do you want to find?</h2>
     <div class="form__container">
       <Chips id="chips" v-model="selectedKeywords" separator=" " :allowDuplicate="false" />
     </div>
