@@ -3,6 +3,7 @@ from doctest import debug
 from os import name
 import re
 from tkinter import N
+from turtle import mode
 from venv import create
 from numpy import rec, where
 from prisma import Prisma, types, models
@@ -108,7 +109,10 @@ async def recipebyKeyword(keyword: str):
     await db.connect()
     found = await db.recipes.find_many(
         where={
-            "name": keyword
+            "name": {
+                "contains" : keyword,
+                "mode": "insensitive"
+            }
         }
     )  
     await db.disconnect()
@@ -121,7 +125,10 @@ async def recipesbyKeywordWithSorting(keyword: str, sorting: str):
     await db.connect()
     found = await db.recipes.find_many(
         where={
-            "name": keyword
+            "name": {
+                "contains" : keyword,
+                "mode": "insensitive"
+            }
         },
         order={
             'name': 'asc'

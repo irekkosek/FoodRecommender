@@ -1,13 +1,16 @@
 - CRUD
     - [x] read one and all recipes
     - [x] create recipe
-    - [ ] update recipe
-    - [ ] delete recipe
+    - [x] update recipe
+    - [x] delete recipe
 - FastAPI endpoints
     - [x] read one and all recipes
     - [x] create recipe
-    - [ ] update recipe
-    - [ ] delete recipe
+    - [x] update recipe
+    - [x] delete recipe
+CRUD & API:
+- [x] /search/{keyword}
+
 - Structurize whole project. decompose FoodRecommender and main to separate files, Write entry
  code in app.py and diverge to other files 
 - migrate to new db schema (add user owns recipe,
