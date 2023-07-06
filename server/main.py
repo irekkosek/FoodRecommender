@@ -207,6 +207,22 @@ async def create(recipe: Recipe):
     )
     await db.disconnect()
 
+@app.get("/liked-recipes/{user_id}")
+async def getLikedRecipes(user_id: int):
+    db = Prisma()
+    await db.connect()
+    userfavs = await db.user_likes_recipes.find_many(
+        where={'USER_id': user_id}
+    )
+    userfavs_ids = [fav.RECIPE_id for fav in userfavs]
+    user_db_recipes = await db.recipes.find_many(where={
+        'id': {
+            'in': userfavs_ids
+        }
+    })
+    await db.disconnect()
+    return user_db_recipes
+
 
 # @app.get("/create/recipes")
 # async def create():
