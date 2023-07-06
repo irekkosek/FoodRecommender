@@ -1,27 +1,52 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { RecipesData } from '../database'
 import { onMounted, ref, watch } from 'vue'
 import Checkbox from 'primevue/checkbox'
 import Button from 'primevue/button'
 import ToggleButton from 'primevue/togglebutton'
+import Rating from 'primevue/rating'
+import Loader from '@/components/common/Loader.vue'
+import { useSetSavedIngredientsStore } from '@/stores/setSavedIngredients'
+import axios from 'axios'
 
 const route = useRoute()
 const recipe = ref()
+const tags = ref()
+const score = ref(0)
 const checkedIngredients = ref()
 const isLiked = ref(false)
+const setSavedIngredients = useSetSavedIngredientsStore()
 
 watch(checkedIngredients, (newVal) => {
-  localStorage.ingredients = newVal
+  setSavedIngredients.setIngredients(newVal)
 })
+onMounted(async () => {
+  const ing = setSavedIngredients.getIngredients()
+  checkedIngredients.value = ing
+    ? ing.split(',').filter((ingredient: string) => ingredient !== '')
+    : []
 
-onMounted(() => {
-  checkedIngredients.value = localStorage.ingredients
-    .split(',')
-    .filter((ingredient: string) => ingredient !== '')
-  recipe.value = RecipesData.getProductsData().find(
-    ({ id }) => id == (route.query.id as unknown as number)
-  )
+  const recipeID = route.query.id as unknown as string
+  recipe.value = await axios
+    .get(`http://127.0.0.1:8000/recipes/${recipeID}`)
+    .then((response) => {
+      return JSON.parse(response.data)[0]
+    })
+    .catch((err) => console.log(err))
+  console.log(recipe.value)
+
+  tags.value = (Object.keys(recipe.value) as (keyof typeof recipe.value)[]).filter((key) => {
+    return recipe.value[key] === 1
+  })
+
+  tags.value = tags.value.map((el: any) => {
+    return el.split('_').slice(1).join(' ')
+  })
+
+  tags.value =
+    tags.value.length > 5 ? tags.value.sort(() => 0.5 - Math.random()).slice(0, 5) : tags.value
+
+  score.value = Math.floor(recipe.value.score / 19)
   if (!recipe.value.isFavourite) return
   isLiked.value = recipe.value.isFavourite
 })
@@ -36,16 +61,16 @@ const goToSource = (url: string) => {
     <div class="recipe" v-if="recipe">
       <div v-if="recipe.isOwned" class="recipe__owned-marker"></div>
 
-      <div class="recipe__image" :style="`background-image: url(${recipe.imageURL});`">
+      <div class="recipe__image" :style="`background-image: url(${recipe.thumbnail_url});`">
         <div class="recipe__image__overlay">
-          <span class="recipe__title">{{ recipe.title }}</span>
+          <span class="recipe__title">{{ recipe.name }}</span>
           <div class="recipe__tags">
             <div class="recipe__tags__tags">
-              <span v-for="tag in recipe.tags">#{{ tag }} </span>
+              <span v-for="tag in tags">#{{ tag }} </span>
             </div>
-            <div class="recipe__tags__cuisines">
+            <!-- <div class="recipe__tags__cuisines">
               <span v-for="cuisine in recipe.cuisines">#{{ cuisine }} </span>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -76,8 +101,9 @@ const goToSource = (url: string) => {
           <span class="recipe__steps-section__title">Steps</span>
           <span v-for="(step, index) in recipe.steps">{{ `${index + 1}. ${step}` }}</span>
         </div>
+        <Rating v-model="score" readonly class="recipe__rating__section" />
         <Button
-          @click="goToSource(recipe.sourceURL)"
+          @click="goToSource(recipe.video_url)"
           icon="pi pi-arrow-right"
           iconPos="right"
           label="Go to source"
@@ -87,6 +113,7 @@ const goToSource = (url: string) => {
         />
       </div>
     </div>
+    <Loader v-else />
   </div>
 </template>
 
@@ -164,6 +191,9 @@ const goToSource = (url: string) => {
       flex-wrap: wrap;
       gap: 0.5rem;
     }
+  }
+  &__rating__section {
+    margin: 2rem;
   }
   &__steps-section,
   &__ingredients-section {

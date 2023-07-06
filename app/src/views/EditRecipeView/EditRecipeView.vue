@@ -12,10 +12,11 @@ onMounted(() => {
     ({ id }) => id == (route.query.id as unknown as number)
   )
 })
+// get record from api
 </script>
 
 <template>
   <div>
-    <RecipeForm v-if="recipe" :pageTitle="`Edit ${recipe.title} recipe`" />
+    <RecipeForm v-if="recipe" :pageTitle="`Edit ${recipe.name} recipe`" />
   </div>
 </template>

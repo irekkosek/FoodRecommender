@@ -2,6 +2,8 @@ import asyncio
 from doctest import debug
 from os import name
 import re
+from tkinter import N
+from venv import create
 from numpy import rec, where
 from prisma import Prisma, types, models
 from fastapi import FastAPI
@@ -27,6 +29,31 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.post("/recipes/update/{id}",  response_model=models.RECIPES)
+async def update(recipe: RECIPESWithoutId , id: int):
+    db = Prisma()
+    await db.connect()
+    updated_recipe_input = types.RECIPESUpdateInput(**json.loads(recipe.json()))
+    updated_recipe = await db.recipes.update(
+    where={
+        'id': id,
+    },
+    data=updated_recipe_input,
+    )
+    await db.disconnect()
+    return updated_recipe
+
+@app.post("/recipes/delete/{recipe_id}")
+async def delete(recipe_id: int):
+    db = Prisma()
+    await db.connect()
+    recipe = await db.recipes.delete(
+        where={'id': recipe_id}
+    )
+    await db.disconnect()
+    return recipe
 
 def list_recipes_to_json_df(found):
     found_json = "["
@@ -73,6 +100,49 @@ async def root():
         # print(df.head())
     # else:
     #     found_json = "[]"
+    return found_json
+
+@app.get("/search/{keyword}", response_model=list[models.RECIPES])
+async def recipebyKeyword(keyword: str):
+    db = Prisma()
+    await db.connect()
+    found = await db.recipes.find_many(
+        where={
+            "name": keyword
+        }
+    )  
+    await db.disconnect()
+    return found
+
+
+@app.get("/search/{keyword}/{sorting}",response_model=list[models.RECIPES])
+async def recipesbyKeywordWithSorting(keyword: str, sorting: str):
+    db = Prisma()
+    await db.connect()
+    found = await db.recipes.find_many(
+        where={
+            "name": keyword
+        },
+        order={
+            'name': 'asc'
+        }
+    )  
+    await db.disconnect()
+    return found
+
+
+
+
+@app.get("/search/{keyword}/{sorting}/{filtering}")
+async def recipesbyKeywordWithSortingAndFiltering(keyword: str, sorting: str, filtering: str, criteria: int):
+    db = Prisma()
+    await db.connect()
+    all_recipes = await db.recipes.find_many(order={sorting: 'desc'},where={filtering:{'gt': criteria}})  
+    await db.disconnect()
+    found = [recipe for recipe in all_recipes if str(keyword) in str(recipe.name)]
+    found_json, df = list_recipes_to_json_df(found)
+    print(df.head())
+
     return found_json
 @app.get("/healthcheck")
 async def healthcheck():
@@ -162,6 +232,25 @@ async def CreateRecipeFromJson(recipejson: str, debug=False, verbose=True):
 
 
 
+@app.get("/liked-recipes/{user_id}")
+async def getLikedRecipes(user_id: int):
+    db = Prisma()
+    await db.connect()
+    userfavs = await db.user_likes_recipes.find_many(
+        where={'USER_id': user_id}
+    )
+    userfavs_ids = [fav.RECIPE_id for fav in userfavs]
+    user_db_recipes = await db.recipes.find_many(where={
+        'id': {
+            'in': userfavs_ids
+        }
+    })
+    await db.disconnect()
+    return user_db_recipes
+
+
+
+
 
 #python3 main.py
 async def main() -> None:
@@ -185,6 +274,3 @@ async def main() -> None:
 
 if __name__ == '__main__':
     asyncio.run(main())
-
-
-

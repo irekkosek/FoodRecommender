@@ -1,9 +1,9 @@
 export interface BasicRecipe {
   id: number
-  title: string
+  name: string
   description: string
   tags: string[]
-  imageURL: string
+  thumbnail_url: string
   isFavourite: any
   isOwned: boolean
 }
@@ -16,5 +16,5 @@ export interface ExtendedRecipe extends BasicRecipe {
   cookTime?: string
   ingredients: string[]
   steps: string[]
-  sourceURL?: string
+  video_url?: string
 }

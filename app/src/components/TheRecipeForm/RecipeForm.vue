@@ -3,12 +3,13 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import Chips from 'primevue/chips'
 import Button from 'primevue/button'
+import Divider from 'primevue/divider'
 import { onMounted, ref, watch } from 'vue'
 import { RecipesData } from '@/views/database'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useSaveRecipeStore } from '@/stores/saveRecipe'
-import router from '@/router'
 
+const router = useRouter()
 const saveRecipeStore = useSaveRecipeStore()
 const isFormValid = ref(false)
 
@@ -18,6 +19,7 @@ watch(isFormValid, (newVal) => {
     router.push({
       path: '/owned-recipe',
       query: {
+        ...route.query,
         id: route.query.id ? route.query.id : Math.floor(Math.random() * 100)
       }
     })
@@ -29,11 +31,12 @@ watch(
   (newVal) => {
     if (newVal) {
       if (
-        !title.value ||
+        !name.value ||
         !(ingredients.value.length > 0) ||
         !(tags.value.length > 0) ||
         !(stepsValues.value.length > 0) ||
-        !enteredPrepTime.value
+        !enteredPrepTime.value ||
+        !enteredImageURL.value
       )
         isFormValid.value = false
       else isFormValid.value = true
@@ -42,15 +45,16 @@ watch(
   }
 )
 
-const title = ref(null)
+const name = ref(null)
 const ingredients = ref(['milk'])
 const tags = ref(['asian', 'easy'])
 const stepsValues = ref(['Add more steps!'])
 const enteredStep = ref('')
 const enteredPrepTime = ref()
+const enteredImageURL = ref()
 
 // const formFields = ref([
-//   {name: 'title', value: null},
+//   {name: 'name', value: null},
 //   {name: 'ingredients', value: ['milk']},
 //   {name: 'tags', value: ['asian', 'easy']},
 //   {name: 'stepsValues', value: ['Add more steps!']},
@@ -78,24 +82,34 @@ onMounted(() => {
     ({ id }) => id == (route.query.id as unknown as number)
   )
   const r = recipe.value
-  title.value = r.title
+  name.value = r.name
   ingredients.value = r.ingredients
   stepsValues.value = r.steps
   tags.value = r.tags
+  enteredImageURL.value = r.thumbnail_url
 })
 </script>
 
 <template>
   <div>
     <h2>{{ props.pageTitle }}</h2>
+    <Divider />
     <div class="form__container">
       <span class="p-float-label">
-        <InputText id="username" v-model="title" :class="title ?? `p-invalid`" />
-        <label for="username">Recipe title</label>
+        <InputText id="username" v-model="name" :class="name ?? `p-invalid`" />
+        <label for="username">Recipe name</label>
       </span>
       <span class="p-float-label">
         <Chips id="chips" v-model="ingredients" separator=" " :class="ingredients ?? `p-invalid`" />
         <label for="chips">Ingredients</label>
+      </span>
+      <span class="p-float-label">
+        <InputText
+          input-id="image-url"
+          v-model="enteredImageURL"
+          :class="enteredImageURL ?? `p-invalid`"
+        />
+        <label for="image-url">Image URL</label>
       </span>
       <div class="steps__container">
         <label>Steps</label>

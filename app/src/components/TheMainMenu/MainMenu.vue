@@ -56,11 +56,11 @@ const menuConfigurations: menuConf[] = [
   },
   {
     path: '/recipe',
-    buttons: ['Add Recipe', 'Home']
+    buttons: ['Go Back']
   },
   {
     path: '/owned-recipe',
-    buttons: ['Add Recipe', 'Home', 'Edit Recipe']
+    buttons: ['Go Back', 'Edit Recipe']
   },
   {
     path: '/search',
@@ -68,19 +68,19 @@ const menuConfigurations: menuConf[] = [
   },
   {
     path: '/search-result',
-    buttons: ['Home', 'Add Recipe', 'Search']
+    buttons: ['Go Back', 'Add Recipe', 'Search']
   },
   {
     path: '/my-recipes',
-    buttons: ['Home', 'Add Recipe']
+    buttons: ['Go Back', 'Add Recipe']
   },
   {
     path: '/liked-recipes',
-    buttons: ['Home', 'Add Recipe']
+    buttons: ['Go Back', 'Add Recipe']
   },
   {
     path: '/shopping-list',
-    buttons: ['Home']
+    buttons: ['Go Back']
   }
 ]
 
@@ -98,7 +98,19 @@ const items: Ref<item[]> = ref([
     label: 'Go Back',
     icon: 'src/assets/arrow-back.svg',
     command: () => {
-      router.go(-1)
+      const { previousPage, id, ...restParams } = route.query
+      if (['/liked-recipes', '/my-recipes', '/search-result'].includes(previousPage as string))
+        router.push({
+          path: previousPage as string,
+          query: {
+            ...restParams
+          }
+        })
+      else if (['/', '/add-recipe'].includes(previousPage as string))
+        router.push({
+          path: previousPage as string
+        })
+      else router.push('/')
     }
   },
   {
@@ -119,7 +131,14 @@ const items: Ref<item[]> = ref([
     label: 'Add Recipe',
     icon: 'src/assets/add.svg',
     command: () => {
-      router.push('/add-recipe')
+      const { previousPage, id, ...restParams } = route.query
+      router.push({
+        path: '/add-recipe',
+        query: {
+          ...restParams,
+          previousPage: router.currentRoute.value.path
+        }
+      })
     }
   },
   {
@@ -143,6 +162,7 @@ const items: Ref<item[]> = ref([
       router.push({
         path: '/edit-recipe',
         query: {
+          ...route.query,
           id: route.query.id
         }
       })
@@ -152,21 +172,27 @@ const items: Ref<item[]> = ref([
     label: 'Delete Recipe',
     icon: 'src/assets/delete.svg',
     command: () => {
-      modalVisible.value = true
-      modalText.value = 'Are you sure you want to delete this recipe?'
-      router.push('/')
+      // modalVisible.value = true
+      // modalText.value = 'Are you sure you want to delete this recipe?'
+      const { previousPage, id, ...restParams } = route.query
+      router.push({
+        path: previousPage as string,
+        query: {
+          ...restParams
+        }
+      })
     }
   },
   {
     label: 'Discard Changes',
     icon: 'src/assets/undo.svg',
     command: () => {
-      modalVisible.value = true
-      modalText.value = 'Are you sure you want to discard changes?'
+      // modalVisible.value = true
+      // modalText.value = 'Are you sure you want to discard changes?'
       router.push({
         path: '/owned-recipe',
         query: {
-          id: route.query.id
+          ...route.query
         }
       })
     }
