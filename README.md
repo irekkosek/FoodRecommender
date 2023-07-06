@@ -59,22 +59,41 @@ npm run lint
 - docker (this can be the only requirement if you plan to use docker for development)
 
 ## Project Setup
-always first start with 
+Supported arguments:
+```
+CLEAN_DB=true # will drop all tables and recreate them
+SEED_DB=true # will seed the database with recipes
+SHORT_DB=true # will seed the database with 100 recipes
+```
+To start project you can use all or selected above arguments with docker-compose up
+```sh
+CLEAN_DB=true SEED_DB=true SHORT_DB=true docker compose up
+```
+or you can supply them in .env file in root folder
+
+and when coming back again just run 
+```sh
+docker-compose up
+```
+if you wish to run the server in detached mode just add -d to the end of the command
 ```sh
 docker-compose up -d
 ```
-this will, among few other things, start the database
+
+if you wish to run everything locally you can follow these steps:
 
 ```sh
 cd server && python -m venv venv
 pip install -r requirements.txt
-prisma db push && prisma generate
+prisma db push
 ```
 you can read more about prisma [here](https://prisma-client-py.readthedocs.io/en/stable/getting_started/setup/)
 
 to seed the database
 ```sh
 python import_recipes.py
+python create_user.py
+python create_user_likes.py
 ```
 you can check the database with [prisma studio](https://www.prisma.io/studio)
 just run
