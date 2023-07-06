@@ -11,9 +11,20 @@ from FoodRecommender import FoodRecommender
 from FoodRecommender import createRecommendations
 from import_recipes import import_recipes
 from prisma.partials import RECIPESWithoutId
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 def list_recipes_to_json_df(found):
     found_json = "["
