@@ -120,7 +120,7 @@ async def recipebyKeyword(keyword: str):
 
 
 @app.get("/search/{keyword}/{sorting}",response_model=list[models.RECIPES])
-async def recipesbyKeywordWithSorting(keyword: str, sorting: str):
+async def recipesbyKeywordWithSorting(keyword: str, sorting: models.fields.LiteralString):
     db = Prisma()
     await db.connect()
     found = await db.recipes.find_many(
@@ -131,8 +131,9 @@ async def recipesbyKeywordWithSorting(keyword: str, sorting: str):
             }
         },
         order={
-            'name': 'asc'
-        }
+            sorting: 'asc'
+        } # type: ignore
+        
     )  
     await db.disconnect()
     return found
@@ -142,13 +143,25 @@ async def recipesbyKeywordWithSorting(keyword: str, sorting: str):
 
 @app.get("/search/{keyword}/{sorting}/{filtering}")
 async def recipesbyKeywordWithSortingAndFiltering(keyword: str, sorting: str, filtering: str, criteria: int):
+
     db = Prisma()
     await db.connect()
-    all_recipes = await db.recipes.find_many(order={sorting: 'desc'},where={filtering:{'gt': criteria}})  
+    found = await db.recipes.find_many(
+        where={
+            "name": {
+                "contains" : keyword,
+                "mode": "insensitive"
+            },
+            'OR':  [{filtering.lower():{'gt': criteria}},
+                    {filtering.lower(): criteria}]            
+        }, # type: ignore
+        order={
+            sorting: 'asc'
+        } # type: ignore
+        
+    )  
     await db.disconnect()
-    found = [recipe for recipe in all_recipes if str(keyword) in str(recipe.name)]
-    found_json, df = list_recipes_to_json_df(found)
-    print(df.head())
+    return found
 
     return found_json
 @app.get("/healthcheck")
