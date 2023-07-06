@@ -37,3 +37,5 @@ https://github.com/prisma/prisma/issues/13377
 https://github.com/prisma/prisma/issues/11677
 
 [ ] prisma migrate deploy for persisting state throught migrations
+[ ] check if debug and verbose options are reasonably configured
+[ ] log api calls to stdout
