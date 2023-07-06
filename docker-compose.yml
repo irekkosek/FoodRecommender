@@ -15,6 +15,9 @@ services:
   server:
     environment:
       DATABASE_URL: "postgresql://postgres:root@db:5432"
+      CLEAN_DB: ${CLEAN_DB:-false}
+      SEED_DB: ${SEED_DB:-false}
+      SHORT_DB: ${SHORT_DB:-false}
     entrypoint: ${ENTRYPOINT}
     command: ${CMD}
     build: ./server

@@ -35,3 +35,5 @@ This problem was also described here:
 https://github.com/prisma/prisma/issues/11791
 https://github.com/prisma/prisma/issues/13377
 https://github.com/prisma/prisma/issues/11677
+
+[ ] prisma migrate deploy for persisting state throught migrations
