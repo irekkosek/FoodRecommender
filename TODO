@@ -10,6 +10,10 @@
     - [x] delete recipe
 CRUD & API:
 - [x] /search/{keyword}
+- [x] /search/{keyword}/{sorting}
+- [x] /search/{keyword}/{sorting}/{filtering}
+- [x] /liked-recipes/{user_id}
+- [ ] /add-liked-recipes/{user_id}/
 
 - Structurize whole project. decompose FoodRecommender and main to separate files, Write entry
  code in app.py and diverge to other files 
