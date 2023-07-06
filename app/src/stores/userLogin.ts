@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useUserLoginStore = defineStore('user-login', {
   state: () => {
-    return { nick: '' }
+    return { nick: '', id: -1 }
   },
   actions: {
     setUserNick(value: string) {
@@ -11,6 +11,13 @@ export const useUserLoginStore = defineStore('user-login', {
     },
     getUserNick() {
       return localStorage.userNick
+    },
+    setUserId(value: number) {
+      this.id = value
+      localStorage.userId = this.id
+    },
+    getUserId() {
+      return localStorage.userId
     }
   }
 })
