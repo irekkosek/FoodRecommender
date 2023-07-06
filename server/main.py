@@ -14,9 +14,7 @@ from prisma.partials import RECIPESWithoutId
 from pydantic import BaseModel
 
 
-
 app = FastAPI()
-
 
 class User(BaseModel):
     name: str
@@ -125,80 +123,6 @@ class Recipe(BaseModel):
             cuisine_lebanese: int
             cuisine_south_african: int
             cuisine_venezuelan: int
-
-
-def list_recipes_to_json_df(found):
-    found_json = "["
-    for recipe in found:
-        # found.__dict__
-        found_json += f'{recipe.json()},'
-    found_json = found_json[:-1] + "]"
-    df = pd.read_json(found_json)
-    return found_json,df
-
-
-def prettifyJson(jsonString):
-    parsed = json.loads(jsonString)
-    return json.dumps(parsed, indent=4)
-
-#uvicorn main:app --reload
-@app.get("/")
-async def root():
-    db = Prisma()
-    await db.connect()
-    found = await db.recipes.find_many(where={
-        'OR' : [
-            {'id': 1},
-            {'id': 27},
-            {'id': 868}
-            ]
-        }
-    )
-
-    await db.disconnect()
-
-    if found.__len__() > 0:
-        found_json, df = list_recipes_to_json_df(found)
-        print(df.head())
-    else:
-        found_json = "[]"
-    return found_json
-    # convert found : List[RECPIES] to json
-    # found_json = []
-    # for recipe in found:
-        # print(f'found recipe: {recipe.json(indent=2)}')
-    # if found is not None:
-    #     found_json, df = list_recipes_to_json_df(found)
-        # print(df.head())
-    # else:
-    #     found_json = "[]"
-    return found_json
-@app.get("/healthcheck")
-async def healthcheck():
-    return "healthy"
-
-
-@app.post("user/create")
-async def usercreate(user: User):
-    db=Prisma()
-    await db.connect()
-    user=await db.users.create(
-        {'name': user.name,
-        'password': user.password
-    })
-
-
-
-
-    
-@app.post("/recipes/delete/{recipe_id}")
-async def delete(recipe_id: int, recipe: Recipe):
-    db = Prisma()
-    await db.connect()
-    recipe =await db.recipes.delete(
-        where={'id': recipe_id}
-    )
-    await db.disconnect()
 
 
 @app.post("/recipes/update/{id}")
@@ -316,28 +240,85 @@ async def update(recipe: Recipe, id: int):
     await db.disconnect()
     return recipe
 
-
-@app.get("/liked-recipes/{user_id}")
-async def getLikedRecipes(user_id: int):
+@app.post("/recipes/delete/{recipe_id}")
+async def delete(recipe_id: int, recipe: Recipe):
     db = Prisma()
     await db.connect()
-    userfavs = await db.user_likes_recipes.find_many(
-        where={'USER_id': user_id}
+    recipe =await db.recipes.delete(
+        where={'id': recipe_id}
     )
-    userfavs_ids = [fav.RECIPE_id for fav in userfavs]
-    user_db_recipes = await db.recipes.find_many(where={
-        'id': {
-            'in': userfavs_ids
-        }
-    })
     await db.disconnect()
-    return user_db_recipes
+
+def list_recipes_to_json_df(found):
+    found_json = "["
+    for recipe in found:
+        # found.__dict__
+        found_json += f'{recipe.json()},'
+    found_json = found_json[:-1] + "]"
+    df = pd.read_json(found_json)
+    return found_json,df
 
 
+def prettifyJson(jsonString):
+    parsed = json.loads(jsonString)
+    return json.dumps(parsed, indent=4)
 
+#uvicorn main:app --reload
+@app.get("/")
+async def root():
+    db = Prisma()
+    await db.connect()
+    found = await db.recipes.find_many(where={
+        'OR' : [
+            {'id': 1},
+            {'id': 27},
+            {'id': 868}
+            ]
+        }
+    )
 
+    await db.disconnect()
 
+    if found.__len__() > 0:
+        found_json, df = list_recipes_to_json_df(found)
+        print(df.head())
+    else:
+        found_json = "[]"
+    return found_json
+    # convert found : List[RECPIES] to json
+    # found_json = []
+    # for recipe in found:
+        # print(f'found recipe: {recipe.json(indent=2)}')
+    # if found is not None:
+    #     found_json, df = list_recipes_to_json_df(found)
+        # print(df.head())
+    # else:
+    #     found_json = "[]"
+    return found_json
+@app.get("/healthcheck")
+async def healthcheck():
+    return "healthy"
 
+@app.get("/recipes", response_model=list[models.RECIPES])
+async def recipes():
+    found_json = "[]"
+    db = Prisma()
+    await db.connect()
+    found = await db.recipes.find_many()
+    await db.disconnect()
+    return found
+
+@app.get("/recipes/{recipe_id}", response_model=list[models.RECIPES])#, response_model=models.RECIPES)
+async def recipesId(recipe_id: int):
+    db = Prisma()
+    await db.connect()
+    found = await db.recipes.find_many(where={'id': recipe_id})
+    await db.disconnect()
+    return found
+@app.get("/recommend")
+async def emptyRecommend():
+    message="Please enter a user id after /recommend/"
+    return message
 
 @app.get("/search/{keyword}")
 async def recipes(keyword: str):
@@ -389,26 +370,21 @@ async def recipes(keyword: str, sorting: str, filtering: str, criteria: int):
 
     return found_json
 
-
-
-#TODO: switch to response_model=models.RECIPES
-@app.get("/recipes/{recipe_id}")#, response_model=models.RECIPES)
-async def recipesId(recipe_id: int):
+@app.get("/liked-recipes/{user_id}")
+async def getLikedRecipes(user_id: int):
     db = Prisma()
     await db.connect()
-    found = await db.recipes.find_many(where={'id': recipe_id})
+    userfavs = await db.user_likes_recipes.find_many(
+        where={'USER_id': user_id}
+    )
+    userfavs_ids = [fav.RECIPE_id for fav in userfavs]
+    user_db_recipes = await db.recipes.find_many(where={
+        'id': {
+            'in': userfavs_ids
+        }
+    })
     await db.disconnect()
-    # convert found : List[RECPIES] to json
-    # found_json = []
-    found_json, df = list_recipes_to_json_df(found)
-    print(df.head())
-    
-    return found_json
-@app.get("/recommend")
-async def emptyRecommend():
-    message="Please enter a user id after /recommend/"
-    return message
-
+    return user_db_recipes
 
 @app.get("/recommend/{user_id}")
 async def RunRecommend(user_id: int, debug=False, verbose=True):
@@ -445,7 +421,7 @@ async def RunRecommend(user_id: int, debug=False, verbose=True):
     print(f'recommended ids:\n {prettifyJson(recommendedIdsJson)}') if verbose else None
     return recommendedIdsJson
 
-# @app.post("/createRecipe")
+
 @app.post("/createRecipe", response_model=models.RECIPES)
 async def createRecipe(recipe: RECIPESWithoutId):#(recipejson: str):
 
@@ -494,8 +470,4 @@ async def main() -> None:
     await db.disconnect()
 
 if __name__ == '__main__':
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     asyncio.run(main())
-
-
-
