@@ -250,6 +250,19 @@ async def CreateRecipeFromJson(recipejson: str, debug=False, verbose=True):
 
     return imported_recipe
 
+@app.post("/user/{user_id}/like/{recipe_id}", response_model=models.USER_likes_RECIPES)
+async def setLikedRecipes(user_id: int, recipe_id: int):
+    db = Prisma()
+    await db.connect()
+    userfavs = await db.user_likes_recipes.create(
+    data={
+        "USER_id": user_id,
+        "RECIPE_id": recipe_id
+    }
+    )
+    await db.disconnect()
+    return userfavs
+
 
 
 @app.get("/liked-recipes/{user_id}")
