@@ -16,6 +16,23 @@ const score = ref(0)
 const checkedIngredients = ref()
 const isLiked = ref(false)
 const setSavedIngredients = useSetSavedIngredientsStore()
+const steps = [
+  'Mix dry ingredients.',
+  'Melt butter.',
+  'Mix wet ingredients',
+  'Add butter',
+  'Mix with dry ingredients',
+  'Bake on pan.',
+  'Enjoy!'
+]
+const ingredients = [
+  'cup of milk',
+  '2 eggs',
+  'tbsp of butter',
+  'cup of flour',
+  '3 tbsp of sugar',
+  'vanilla extract'
+]
 
 watch(checkedIngredients, (newVal) => {
   setSavedIngredients.setIngredients(newVal)
@@ -86,7 +103,7 @@ const goToSource = (url: string) => {
         <div class="recipe__ingredients-section">
           <span class="recipe__ingredients-section__title">Ingredients</span>
           <div class="recipe__ingredients-section__list">
-            <div v-for="(value, index) in recipe.ingredients" :key="index">
+            <div v-for="(value, index) in ingredients" :key="index">
               <Checkbox
                 v-model="checkedIngredients"
                 :inputId="`ingredient-${index}`"
@@ -99,7 +116,7 @@ const goToSource = (url: string) => {
         </div>
         <div class="recipe__steps-section">
           <span class="recipe__steps-section__title">Steps</span>
-          <span v-for="(step, index) in recipe.steps">{{ `${index + 1}. ${step}` }}</span>
+          <span v-for="(step, index) in steps">{{ `${index + 1}. ${step}` }}</span>
         </div>
         <Rating v-model="score" readonly class="recipe__rating__section" />
         <Button
