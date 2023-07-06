@@ -263,6 +263,18 @@ async def setLikedRecipes(user_id: int, recipe_id: int):
     await db.disconnect()
     return userfavs
 
+@app.post("/user/{user_id}/owns/{recipe_id}", response_model=models.USER_owns_RECIPES)
+async def setOwnedRecipes(user_id: int, recipe_id: int):
+    db = Prisma()
+    await db.connect()
+    userowns = await db.user_owns_recipes.create(
+    data={
+        "USER_id": user_id,
+        "RECIPE_id": recipe_id
+    }
+    )
+    await db.disconnect()
+    return userowns
 
 
 @app.get("/liked-recipes/{user_id}")
