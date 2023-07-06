@@ -13,12 +13,14 @@ const password = ref()
 
 onMounted(() => {
   useUserLoginStore().setUserNick('')
+  useUserLoginStore().setUserId(-1)
 })
 
 const updateUserID = () => {
   // check if nick and password are in database, then
   if (!(nick.value === mockedUser.nick && password.value === mockedUser.password)) return
   useUserLoginStore().setUserNick(nick.value)
+  useUserLoginStore().setUserId(Math.floor(Math.random() * 100))
   router.push('/')
 }
 </script>

@@ -30,7 +30,7 @@ onMounted(async () => {
   recipe.value = await axios
     .get(`http://127.0.0.1:8000/recipes/${recipeID}`)
     .then((response) => {
-      return JSON.parse(response.data)[0]
+      return response.data[0]
     })
     .catch((err) => console.log(err))
   console.log(recipe.value)

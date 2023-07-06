@@ -8,19 +8,36 @@ import { onMounted, ref, watch } from 'vue'
 import { RecipesData } from '@/views/database'
 import { useRoute, useRouter } from 'vue-router'
 import { useSaveRecipeStore } from '@/stores/saveRecipe'
+import axios from 'axios'
+import { useUserLoginStore } from '@/stores/userLogin'
+import { data } from './data'
 
 const router = useRouter()
 const saveRecipeStore = useSaveRecipeStore()
+const userLogin = useUserLoginStore()
 const isFormValid = ref(false)
 
 watch(isFormValid, (newVal) => {
   if (newVal) {
     // push new object to database
+    const tempID = 100
+    axios
+      .post('http://127.0.0.1:8000/createRecipe', data, {
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error.response.data)
+      })
     router.push({
       path: '/owned-recipe',
       query: {
         ...route.query,
-        id: route.query.id ? route.query.id : Math.floor(Math.random() * 100)
+        id: route.query.id ? route.query.id : tempID
       }
     })
   }
@@ -45,13 +62,13 @@ watch(
   }
 )
 
-const name = ref(null)
+const name = ref('Name')
 const ingredients = ref(['milk'])
 const tags = ref(['asian', 'easy'])
 const stepsValues = ref(['Add more steps!'])
 const enteredStep = ref('')
-const enteredPrepTime = ref()
-const enteredImageURL = ref()
+const enteredPrepTime = ref(30)
+const enteredImageURL = ref('temp')
 
 // const formFields = ref([
 //   {name: 'name', value: null},
