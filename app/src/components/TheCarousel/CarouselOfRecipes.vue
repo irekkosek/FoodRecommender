@@ -10,9 +10,9 @@ onMounted(() => {
   recipes.value = props.items
 })
 
-const goToRecipe = (recipeId: number, isOwned: boolean) => {
+const goToRecipe = (recipeId: number, USER_owns_RECIPES: boolean) => {
   router.push({
-    path: isOwned ? '/owned-recipe' : '/recipe',
+    path: USER_owns_RECIPES ? '/owned-recipe' : '/recipe',
     query: {
       id: recipeId,
       previousPage: router.currentRoute.value.fullPath
@@ -24,10 +24,10 @@ const goToRecipe = (recipeId: number, isOwned: boolean) => {
   <div class="carousel__wrapper">
     <div
       class="recipe"
-      v-for="{ id, thumbnail_url, name, description, isOwned } in recipes"
-      @click="goToRecipe(id, isOwned)"
+      v-for="{ id, thumbnail_url, name, description, USER_owns_RECIPES } in recipes"
+      @click="goToRecipe(id, USER_owns_RECIPES)"
     >
-      <div v-if="isOwned" class="recipe__owned-marker"></div>
+      <div v-if="USER_owns_RECIPES" class="recipe__owned-marker"></div>
       <div class="recipe__image" :style="`background-image: url(${thumbnail_url});`" />
       <div class="recipe__text">
         <span class="recipe__title">{{ name }}</span>

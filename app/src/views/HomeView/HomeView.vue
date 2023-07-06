@@ -9,8 +9,11 @@ import { useUserLoginStore } from '@/stores/userLogin'
 const userLogin = useUserLoginStore()
 const items = ref([])
 const userName = ref()
+const howManyRecipes = ref()
 
 onMounted(async () => {
+  userName.value = 'Cukinia'
+
   const recipesIds = await axios
     .get(`http://127.0.0.1:8000/recommend/${userLogin.getUserId()}?debug=false&verbose=true`)
     .then((response) => {
@@ -19,6 +22,7 @@ onMounted(async () => {
     .catch((err) => console.log(err))
 
   const array = recipesIds.slice(1, -1).split(',')
+  howManyRecipes.value = array.length
 
   array.forEach(async (id: any) => {
     const recipe = await axios
@@ -30,14 +34,13 @@ onMounted(async () => {
     if (!recipe) return
     items.value.push(recipe[0] as never)
   })
-  userName.value = 'Cukinia'
 })
 
 const randomEmojis = ['😃', '😍', '😎', '😋', '😉', '👇']
 </script>
 
 <template>
-  <div v-if="items">
+  <div v-if="items.length === howManyRecipes">
     <div class="headers">
       <h2>Welcome back {{ userName }}!</h2>
       <h3>

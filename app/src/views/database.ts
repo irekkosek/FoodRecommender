@@ -22,8 +22,8 @@ export const RecipesData = {
         tags: ['lunch', 'dinner'],
         ingredients: ['milk', 'eggs', 'cheese', 'water'],
         steps: ['Mix all dry ingredients', 'Combine with wet ingredients', 'Bake', 'Enjoy!'],
-        isFavourite: false,
-        isOwned: false
+        USER_likes_RECIPES: false,
+        USER_owns_RECIPES: false
       },
       {
         id: 2,
@@ -35,8 +35,8 @@ export const RecipesData = {
         tags: ['lunch', 'breakfast'],
         ingredients: ['milk', 'eggs', 'cheese', 'water'],
         steps: ['Mix all dry ingredients', 'Combine with wet ingredients', 'Bake', 'Enjoy!'],
-        isFavourite: false,
-        isOwned: true
+        USER_likes_RECIPES: false,
+        USER_owns_RECIPES: true
       },
       {
         id: 3,
@@ -49,8 +49,8 @@ export const RecipesData = {
         cuisines: ['american'],
         ingredients: ['milk', 'eggs', 'cheese', 'water'],
         steps: ['Mix all dry ingredients', 'Combine with wet ingredients', 'Bake', 'Enjoy!'],
-        isFavourite: true,
-        isOwned: true
+        USER_likes_RECIPES: true,
+        USER_owns_RECIPES: true
       },
       {
         id: 4,
@@ -63,8 +63,8 @@ export const RecipesData = {
         cuisines: ['italian'],
         ingredients: ['milk', 'eggs', 'cheese', 'water'],
         steps: ['Mix all dry ingredients', 'Combine with wet ingredients', 'Bake', 'Enjoy!'],
-        isFavourite: true,
-        isOwned: false
+        USER_likes_RECIPES: true,
+        USER_owns_RECIPES: false
       },
       {
         id: 5,
@@ -76,8 +76,8 @@ export const RecipesData = {
         tags: ['lunch', 'snack'],
         ingredients: ['milk', 'eggs', 'cheese', 'water'],
         steps: ['Mix all dry ingredients', 'Combine with wet ingredients', 'Bake', 'Enjoy!'],
-        isFavourite: false,
-        isOwned: false
+        USER_likes_RECIPES: false,
+        USER_owns_RECIPES: false
       },
       {
         id: 6,
@@ -90,8 +90,8 @@ export const RecipesData = {
         cuisines: ['american'],
         ingredients: ['milk', 'eggs', 'cheese', 'water'],
         steps: ['Mix all dry ingredients', 'Combine with wet ingredients', 'Bake', 'Enjoy!'],
-        isFavourite: false,
-        isOwned: false
+        USER_likes_RECIPES: false,
+        USER_owns_RECIPES: false
       }
     ]
   }

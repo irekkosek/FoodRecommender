@@ -7,6 +7,7 @@ import ToggleButton from 'primevue/togglebutton'
 import Sidebar from 'primevue/sidebar'
 import Divider from 'primevue/divider'
 import RadioButton from 'primevue/radiobutton'
+import axios from 'axios'
 
 const router = useRouter()
 const route = useRoute()
@@ -16,13 +17,20 @@ const isFilterSidebarVisible = ref(false)
 const isSortSidebarVisible = ref(false)
 const selectedKeywords: any = ref([])
 const sorting: Ref<boolean> = ref(false)
-const sortingOptions = ['rating', 'prep time', 'course', 'number of ingredients', 'none']
+const sortingOptions = ['score', 'ratings_positive', 'ratings_negative', 'none']
 const selectedSorting = ref('none')
 
 const tags = [
-  { name: 'Prep Time', values: ['< 15 mins', '< 30 mins', '< 45 mins'] },
-  { name: 'Course', values: ['breakfast', 'lunch', 'dinner', 'dessert'] },
-  { name: 'Cuisine', values: ['american', 'asian', 'european'] }
+  {
+    name: 'Prep Time',
+    values: [
+      'difficulty_under_15_minutes',
+      'difficulty_under_30_minutes',
+      'difficulty_under_45_minutes'
+    ]
+  },
+  { name: 'Course', values: ['meal_breakfast', 'meal_snacks', 'meal_dinner', 'meal_drinks'] },
+  { name: 'Cuisine', values: ['cuisine_american', 'cuisine_japanese', 'cuisine_mexican'] }
 ]
 
 const props = withDefaults(
@@ -34,13 +42,13 @@ const props = withDefaults(
 
 watch(recipes, () => {
   if (props.recipesToShow === 'favourite') {
-    recipes.value = recipes.value.filter(({ isFavourite }: BasicRecipe) => {
-      if (typeof isFavourite !== undefined) return isFavourite === true
+    recipes.value = recipes.value.filter(({ USER_likes_RECIPES }: BasicRecipe) => {
+      if (typeof USER_likes_RECIPES !== undefined) return USER_likes_RECIPES === 1
       else return false
     })
   } else if (props.recipesToShow === 'owned') {
-    recipes.value = recipes.value.filter(({ isOwned }: BasicRecipe) => {
-      if (typeof isOwned !== undefined) return isOwned === true
+    recipes.value = recipes.value.filter(({ USER_owns_RECIPES }: BasicRecipe) => {
+      if (typeof USER_owns_RECIPES !== undefined) return USER_owns_RECIPES === true
       else return false
     })
   }
@@ -51,9 +59,9 @@ onMounted(() => {
   recipes.value = props.items
 })
 
-const goToRecipe = (recipeId: number, isOwned: boolean) => {
+const goToRecipe = (recipeId: number, USER_owns_RECIPES: boolean) => {
   router.push({
-    path: isOwned ? '/owned-recipe' : '/recipe',
+    path: USER_owns_RECIPES ? '/owned-recipe' : '/recipe',
     query: {
       ...route.query,
       id: recipeId,
@@ -72,11 +80,70 @@ const changeKeywordFocus = (e: any) => {
   e.target.classList.toggle('active')
 }
 
-watch(isFilterSidebarVisible, () => {
+watch(isFilterSidebarVisible, async (newVal) => {
+  if (!newVal) {
+    if (!route.query.keywords) return
+    const keyword = route.query.keywords
+    const filtering = selectedKeywords.value[0]
+    if (!filtering) {
+      if (selectedSorting.value === 'none') {
+        recipes.value = await axios
+          .get(`http://127.0.0.1:8000/search/${keyword}`)
+          .then((response) => {
+            return JSON.parse(response.data)
+          })
+          .catch((err) => console.log(err))
+      } else {
+        recipes.value = await axios
+          .get(`http://127.0.0.1:8000/search/${keyword}/${selectedSorting.value}`)
+          .then((response) => {
+            return JSON.parse(response.data)
+          })
+          .catch((err) => console.log(err))
+      }
+      return
+    }
+    if (selectedSorting.value === 'none') {
+      recipes.value = await axios
+        .get(`http://127.0.0.1:8000/search/${keyword}/id/${filtering}?criteria=1`)
+        .then((response) => {
+          return JSON.parse(response.data)
+        })
+        .catch((err) => console.log(err))
+    } else {
+      recipes.value = await axios
+        .get(
+          `http://127.0.0.1:8000/search/${keyword}/${selectedSorting.value}/${filtering}?criteria=1`
+        )
+        .then((response) => {
+          return JSON.parse(response.data)
+        })
+        .catch((err) => console.log(err))
+    }
+  }
   // filtering request to api
 })
 
-watch(isSortSidebarVisible, () => {
+watch(isSortSidebarVisible, async (newVal) => {
+  if (!newVal) {
+    if (!route.query.keywords) return
+    const keyword = route.query.keywords
+    if (selectedSorting.value === 'none') {
+      recipes.value = await axios
+        .get(`http://127.0.0.1:8000/search/${keyword}`)
+        .then((response) => {
+          return JSON.parse(response.data)
+        })
+        .catch((err) => console.log(err))
+    } else {
+      recipes.value = await axios
+        .get(`http://127.0.0.1:8000/search/${keyword}/${selectedSorting.value}`)
+        .then((response) => {
+          return JSON.parse(response.data)
+        })
+        .catch((err) => console.log(err))
+    }
+  }
   // sorting request to api
 })
 
@@ -113,12 +180,22 @@ watch(sorting, () => {
       <div class="search-results-carousel__wrapper">
         <div
           class="recipe"
-          v-for="{ id, thumbnail_url, name, tags, cuisines, isOwned, isFavourite } in recipes"
-          @click="goToRecipe(id, isOwned)"
+          v-for="{
+            id,
+            thumbnail_url,
+            name,
+            tags,
+            cuisines,
+            USER_owns_RECIPES,
+            USER_likes_RECIPES
+          } in recipes"
+          @click="goToRecipe(id, USER_owns_RECIPES)"
         >
-          <div v-if="isOwned" class="recipe__owned-marker"></div>
+          <div v-if="USER_owns_RECIPES" class="recipe__owned-marker"></div>
           <div
-            :class="`recipe__favourite-marker pi ${isFavourite ? 'pi-heart-fill' : 'pi-heart'}`"
+            :class="`recipe__favourite-marker pi ${
+              USER_likes_RECIPES ? 'pi-heart-fill' : 'pi-heart'
+            }`"
           />
           <div class="recipe__image" :style="`background-image: url(${thumbnail_url});`">
             <div class="recipe__image__overlay">

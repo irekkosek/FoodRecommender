@@ -4,8 +4,8 @@ export interface BasicRecipe {
   description: string
   tags: string[]
   thumbnail_url: string
-  isFavourite: any
-  isOwned: boolean
+  USER_likes_RECIPES: any
+  USER_owns_RECIPES: boolean
 }
 
 export interface ExtendedRecipe extends BasicRecipe {

@@ -5,6 +5,7 @@ import Dialog from 'primevue/dialog'
 import Button from 'primevue/button'
 import { useRoute, useRouter } from 'vue-router'
 import { useSaveRecipeStore } from '@/stores/saveRecipe'
+import axios from 'axios'
 
 const saveRecipeStore = useSaveRecipeStore()
 
@@ -171,10 +172,17 @@ const items: Ref<item[]> = ref([
   {
     label: 'Delete Recipe',
     icon: 'src/assets/delete.svg',
-    command: () => {
+    command: async () => {
       // modalVisible.value = true
       // modalText.value = 'Are you sure you want to delete this recipe?'
       const { previousPage, id, ...restParams } = route.query
+      await axios
+        .post(`http://127.0.0.1:8000/recipes/delete/${id}`)
+        .then((response) => {
+          return response
+        })
+        .catch((err) => console.log(err))
+
       router.push({
         path: previousPage as string,
         query: {

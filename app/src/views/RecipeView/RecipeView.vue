@@ -47,8 +47,8 @@ onMounted(async () => {
     tags.value.length > 5 ? tags.value.sort(() => 0.5 - Math.random()).slice(0, 5) : tags.value
 
   score.value = Math.floor(recipe.value.score / 19)
-  if (!recipe.value.isFavourite) return
-  isLiked.value = recipe.value.isFavourite
+  if (!recipe.value.USER_likes_RECIPES) return
+  isLiked.value = recipe.value.USER_likes_RECIPES
 })
 
 const goToSource = (url: string) => {
@@ -59,7 +59,7 @@ const goToSource = (url: string) => {
 <template>
   <div>
     <div class="recipe" v-if="recipe">
-      <div v-if="recipe.isOwned" class="recipe__owned-marker"></div>
+      <div v-if="recipe.USER_owns_RECIPES" class="recipe__owned-marker"></div>
 
       <div class="recipe__image" :style="`background-image: url(${recipe.thumbnail_url});`">
         <div class="recipe__image__overlay">

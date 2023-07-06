@@ -4,7 +4,7 @@ import InputNumber from 'primevue/inputnumber'
 import Chips from 'primevue/chips'
 import Button from 'primevue/button'
 import Divider from 'primevue/divider'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, type Ref } from 'vue'
 import { RecipesData } from '@/views/database'
 import { useRoute, useRouter } from 'vue-router'
 import { useSaveRecipeStore } from '@/stores/saveRecipe'
@@ -52,7 +52,6 @@ watch(
         !(ingredients.value.length > 0) ||
         !(tags.value.length > 0) ||
         !(stepsValues.value.length > 0) ||
-        !enteredPrepTime.value ||
         !enteredImageURL.value
       )
         isFormValid.value = false
@@ -67,7 +66,7 @@ const ingredients = ref(['milk'])
 const tags = ref(['asian', 'easy'])
 const stepsValues = ref(['Add more steps!'])
 const enteredStep = ref('')
-const enteredPrepTime = ref(30)
+// const enteredPrepTime = ref(30)
 const enteredImageURL = ref('temp')
 
 // const formFields = ref([
@@ -79,7 +78,9 @@ const enteredImageURL = ref('temp')
 //   {name: 'enteredPrepTime', value: 0}
 // ])
 
-const props = withDefaults(defineProps<{ pageTitle: string }>(), { pageTitle: 'Title' })
+const props = withDefaults(defineProps<{ recipe?: any; pageTitle: string }>(), {
+  pageTitle: 'Title'
+})
 
 const addStep = () => {
   stepsValues.value.push(enteredStep.value)
@@ -95,14 +96,20 @@ const recipe = ref()
 
 onMounted(() => {
   if (!route.query.id) return
-  recipe.value = RecipesData.getProductsData().find(
-    ({ id }) => id == (route.query.id as unknown as number)
-  )
-  const r = recipe.value
+  // recipe.value = RecipesData.getProductsData().find(
+  //   ({ id }) => id == (route.query.id as unknown as number)
+  // )
+  const r = props.recipe
   name.value = r.name
   ingredients.value = r.ingredients
   stepsValues.value = r.steps
-  tags.value = r.tags
+  tags.value = (Object.keys(r) as (keyof typeof r)[]).filter((key) => {
+    return r[key] === 1
+  })
+
+  tags.value = tags.value.map((el: any) => {
+    return el.split('_').slice(1).join(' ')
+  })
   enteredImageURL.value = r.thumbnail_url
 })
 </script>
@@ -154,7 +161,7 @@ onMounted(() => {
           @click="addStep()"
         />
       </div>
-      <div class="additional-info">
+      <!-- <div class="additional-info">
         <label for="prep-time">Prep Time</label>
         <InputNumber
           input-id="prep-time"
@@ -164,7 +171,7 @@ onMounted(() => {
           suffix=" mins"
           :class="enteredPrepTime ?? `p-invalid`"
         />
-      </div>
+      </div> -->
       <span class="p-float-label">
         <Chips id="chips" v-model="tags" separator=" " :class="tags ?? `p-invalid`" />
         <label for="chips">Tags</label>
