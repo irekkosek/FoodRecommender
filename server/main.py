@@ -276,7 +276,6 @@ async def setOwnedRecipes(user_id: int, recipe_id: int):
     await db.disconnect()
     return userowns
 
-
 @app.get("/liked-recipes/{user_id}")
 async def getLikedRecipes(user_id: int):
     db = Prisma()
@@ -293,7 +292,24 @@ async def getLikedRecipes(user_id: int):
     await db.disconnect()
     return user_db_recipes
 
-
+@app.get("/owned-recipes/{user_id}")
+async def getOwnedRecipes(user_id: int):
+    db = Prisma()
+    await db.connect()
+    user_db_recipes = await db.user_owns_recipes.find_many( #userowns
+        where={'USER_id': user_id},
+        include={
+            'recipe': True
+        }
+    )
+    # userowns_ids = [owns.RECIPE_id for owns in userowns]
+    # user_db_recipes = await db.recipes.find_many(where={
+    #     'id': {
+    #         'in': userowns_ids
+    #     }
+    # })
+    await db.disconnect()
+    return user_db_recipes
 
 
 
