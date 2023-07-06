@@ -123,6 +123,7 @@ model RECIPES {
     cuisine_venezuelan               Int? @default(0)
 
     USER_likes_RECIPES USER_likes_RECIPES[]
+    USER_owns_RECIPES USER_owns_RECIPES[]
 }
 
 model USERS {
@@ -130,6 +131,14 @@ model USERS {
     name               String?
     password           String?
     USER_likes_RECIPES USER_likes_RECIPES[]
+    USER_owns_RECIPES USER_owns_RECIPES[]
+}
+
+model INSTRUCTIONS {
+    id                 Int                  @id @default(autoincrement())
+    step               String
+    step_number        Int
+    recipe_id          String
 }
 
 model USER_likes_RECIPES {
@@ -141,3 +150,14 @@ model USER_likes_RECIPES {
     @@id([USER_id, RECIPE_id])
     @@map("USER_likes_RECIPES")
 }
+
+model USER_owns_RECIPES {
+    user      USERS   @relation(fields: [USER_id], references: [id])
+    USER_id   Int
+    recipe    RECIPES @relation(fields: [RECIPE_id], references: [id])
+    RECIPE_id Int
+
+    @@id([USER_id, RECIPE_id])
+    @@map("USER_owns_RECIPES")
+}
+
