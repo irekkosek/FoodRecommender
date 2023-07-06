@@ -1,3 +1,39 @@
-add index option to output_id for pseudo progress bar 
-after some point move main.py to examples folder \
+[x] add index option to output_id for pseudo progress bar 
+[ ]after some point move main.py to examples folder \
 and start developing a new main.py for the project
+
+[x] add env to prisma schema `  url= env("DATABASE_URL")`
+[x] add .env file to server folder with DATABASE_URL="postgresql://localhost/?user=postgres&password=root - for local development"
+[x] add env to docker-compose `DATABASE_URL: "postgresql://postgres:root@db:5432"` - for docker development
+[x] add env to docker-compose `entrypoint: ${ENTRYPOINT}` - for docker development
+<!-- add env to dockerfile `ENV DATABASE_URL="postgresql://postgres:root@db:5432"`
+add env to main.py `DATABASE_URL = os.getenv("DATABASE_URL")`
+add env to prisma/.env `DATABASE_URL="postgresql://postgres:root@db:5432"` -->
+[x] add healthcheck for db service in docker-compose
+
+[x] add healthcheck endpoint to fastapi
+[ ] add healthcheck for server service in docker-compose
+[ ] add depend on server healthcheck for app service in docker-compose
+
+[x] fix import_recipes.py __main__
+[x] change get /createrecipe to post /createrecipe
+[x] add static type checking for return statements in
+/recipes/{recipe_id} and /recipes endpoints (will now always return proper json with a Recipe)
+[] add .venv creation to entypoint.sh (will now populate server/.venv with all dependencies)
+[ ] fix /createrecepie partialtype in partialtypes // what i probably meant here is that when 
+trying to create a recipe with a partialtype that has alterated id and relation field and which is
+probably not a subset of RecipeCreate, the server raises an error with offending aforementioned keys
+
+[] There is this bug when pisma CLI is stuck in forever install loop
+when i'm trying to run it in docker container. It is probably because of the fact that i am using a /server:/server volume in docker compose. Turning that one off and doing 
+docker compose build --no-cache && docker compose up seems to resolve this problem. Which even works after turning volume back on. (which is strange?) however this problem were to return it would probably be good to:
+ - create a venv in dockerfile (now its using global installation or partial global installation)
+ - install prisma in dockerfile (prisma generate /db push there is flag or env variable for skipping generation)
+ - create a seperate volume for __pycache__ and .venv
+ - just keeping it separete with --watch turned on  
+This problem was also described here:
+https://github.com/prisma/prisma/issues/11791
+https://github.com/prisma/prisma/issues/13377
+https://github.com/prisma/prisma/issues/11677
+
+[ ] prisma migrate deploy for persisting state throught migrations

@@ -53,7 +53,7 @@ class DataProcessing:
         x.drop(columns_to_drop, axis=1, inplace=True)
         print(f'x.columns: {len(x.columns)}') if debug else None
         print(f'x.columns: {x.columns}') if debug else None
-        return x
+        return x, columns_to_drop
     
     @staticmethod
     def normalization(x):
@@ -124,12 +124,13 @@ class ShowStatistics:
         acc = 1 - acc
         return acc
 
+
 class FoodRecommender:
     def __init__(self):
         pass
     
-    
-    def recommend(self, chosenByUser : pd.DataFrame, restOfDatabase : pd.DataFrame,  debug=False) -> pd.Series:
+    @staticmethod
+    def recommend(chosenByUser : pd.DataFrame, restOfDatabase : pd.DataFrame,  debug=False) -> pd.Series:
         """
         Recommends items based on user's choices and the remaining database.
 
@@ -168,8 +169,9 @@ class FoodRecommender:
         recommendations['id'] = restOfDatabase['id']
         recommendations=ShowStatistics.reorderColumns(recommendations)
         recommendations.to_csv("recomendations.csv", index=False) if debug else None
-
-        recommendationsWithoutIds.drop(columns=['sums'], inplace=True)
+        if 'sums' in recommendationsWithoutIds.columns:
+            recommendationsWithoutIds.drop(columns=['sums'], inplace=True)
+       
 
         # %% [markdown]
         # ### Na koniec obliczamy dokładność rekomendacji porównując średnie wektory ze zbiorów chosenByUser oraz recommendations:
@@ -187,24 +189,53 @@ class FoodRecommender:
             print("Code execution time: {:.2f} seconds".format(elapsed_time))
         return recommendations['id']
 
+
+
+def openDataset(filename="dishes_tags_reworked.csv", __file__=__file__):
+    mod_path = Path(__file__).parent
+    dataset_abs_path = (mod_path / filename).resolve()
+    recipesDatabase = pd.read_csv(fr'{dataset_abs_path}')
+    return recipesDatabase
+
+def showcurrentdir(__file__=__file__):
+    print(f' current file{Path(__file__)}')
+    print(f' current dir{Path(__file__).parent}')
+
+def dropNonTags(recipesDatabase, debug=False):
+    recipesDatabaseWithIds = recipesDatabase.drop(columns=["name",'slug', 'video_url', 'thumbnail_url', 'ratings_negative', 'ratings_positive', 'score'])
+    if('USER_likes_RECIPES' in recipesDatabaseWithIds.columns):
+        recipesDatabaseWithIds = recipesDatabaseWithIds.drop(columns=['USER_likes_RECIPES'])
+    print("after dropping columns: ", recipesDatabaseWithIds.columns) if debug else None
+    return recipesDatabaseWithIds
+
+def prepareDataframes(chosenByUser, restOfDatabase, debug=False):
+    chosenByUserWithIds = dropNonTags(chosenByUser)
+    restOfDatabaseWithIds = dropNonTags(restOfDatabase)
+    restOfDatabaseWithIds, dropped_tags =DataProcessing.dropColumns(restOfDatabaseWithIds, 1, debug=debug)
+    chosenByUserWithIds = chosenByUserWithIds.drop(dropped_tags, axis=1)
+
+    return  chosenByUserWithIds, restOfDatabaseWithIds
+
+def createRecommendations(chosenByUser, restOfDatabas, debug=False):
+    chosenByUserWithIds, recipesDatabaseWithIds=prepareDataframes(chosenByUser, restOfDatabas, debug=debug)
+    recommendations =FoodRecommender().recommend(chosenByUser=chosenByUserWithIds, restOfDatabase=recipesDatabaseWithIds, debug=debug)
+    return recommendations
+
 if __name__ == "__main__":
     pd.set_option('display.max_rows', 10)
     debug = True
 
-    filename="dishes_tags_reworked.csv"
-    mod_path = Path(__file__).parent
-    dataset_abs_path = (mod_path / filename).resolve()
-    recipesDatabase = pd.read_csv(fr'{dataset_abs_path}')
+    recipesDatabase = openDataset(filename="dishes_tags_reworked.csv",__file__=__file__)
+
 
     # %% [markdown]
     # ## Przed rozpoczęciem działania algorytmu TFR tworzymy kopię bazy i usuwamy z niej niepotrzebne kolumny    
     # recipesDatabaseWithNames = recipesDatabase.drop(columns=['id', 'slug', 'video_url', 'thumbnail_url', 'tags', 'cook_time', 'prep_time', 'total_time', 'ratings_negative', 'ratings_positive', 'score', 'protein', 'fat', 'calories', 'sugar', 'carbohydrates', 'fiber'])
     # recipesDatabaseWithNames = recipesDatabase.drop(columns=['id', 'slug', 'video_url', 'thumbnail_url', 'ratings_negative', 'ratings_positive', 'score'])
-    recipesDatabaseWithIds = recipesDatabase.drop(columns=["name",'slug', 'video_url', 'thumbnail_url', 'ratings_negative', 'ratings_positive', 'score'])
-    print("after dropping columns: ", recipesDatabaseWithIds.columns) if debug else None
+    recipesDatabaseWithIds = dropNonTags(recipesDatabase)
     # %% [markdown]
     # ### Najpierw usuwamy kolumny zawierające dane w formacie tekstowym i te zawierające więcej niż 0.3% jedynek i wyświetlamy 5 pierwszych rekordów tego zbioru poniżej:
-    recipesDatabaseWithIds=DataProcessing.dropColumns(recipesDatabaseWithIds, 1, debug=debug)
+    recipesDatabaseWithIds, _ =DataProcessing.dropColumns(recipesDatabaseWithIds, 1, debug=debug)
 
     # %% [markdown]
     # ### Dzielimy zbiór na dwa zbiory chosenByUser, restOfDatabase, przy czym pierwszy jest losową próbką 40 rekordów. Wyświetlamy tenże zbiór poniżej:
@@ -213,7 +244,7 @@ if __name__ == "__main__":
   
   
     recommendations =FoodRecommender().recommend(chosenByUser=chosenByUser, restOfDatabase=restOfDatabase, debug=True)
-    chosen_recepies=recipesDatabase[recipesDatabase['id'].isin(chosenByUser['id'])]
+    # chosen_recepies=recipesDatabase[recipesDatabase['id'].isin(chosenByUser['id'])]
     # result=recipesDatabase[recipesDatabase['id'].isin(recommendations)]
     #create empty dataframe result
     # result = pd.DataFrame(columns=recipesDatabase.columns)

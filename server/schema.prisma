@@ -2,13 +2,15 @@
 datasource db {
     provider = "postgresql"
     // url      = "postgresql://localhost/?user=postgres&password=root"
-    url      = "postgresql://postgres:root@localhost:5432"
+    // url      = "postgresql://postgres:root@db:5432"
+    url      = env("DATABASE_URL")
 }
 
 // generator
 generator client {
     provider             = "prisma-client-py"
     recursive_type_depth = 5
+    partial_type_generator = "scripts/partial_types.py"
 }
 
 // data models

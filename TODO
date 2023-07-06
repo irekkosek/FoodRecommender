@@ -1,6 +1,20 @@
 - CRUD
+    - [x] read one and all recipes
+    - [x] create recipe
+    - [ ] update recipe
+    - [ ] delete recipe
 - FastAPI endpoints
+    - [x] read one and all recipes
+    - [x] create recipe
+    - [ ] update recipe
+    - [ ] delete recipe
+- Structurize whole project. decompose FoodRecommender and main to separate files, Write entry
+ code in app.py and diverge to other files 
+- migrate to new db schema (add user owns recipe,
+add recipe total time, add description, add steps, add ingredients)
+
+done:
 - rework FoodRecommender
- - read to pandas dataframe (from db->csv/json)
+ - read to pandas dataframe (from db->csv/json) 
  - take a correction for slightly changed tags
  - export result to either API endpoint or temp db table
