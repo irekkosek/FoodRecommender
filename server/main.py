@@ -369,6 +369,39 @@ async def delete(recipe_id: int, recipe: Recipe):
     )
     await db.disconnect()
 
+@app.get("/search/{keyword}/{sorting}")
+async def recipes(keyword: str, sorting: str):
+    db = Prisma()
+    await db.connect()
+    all_recipes = await db.recipes.find_many(order={sorting: 'desc'})  # Pobierz wszystkie przepisy z bazy danych
+    await db.disconnect()
+
+    # Filtruj przepisy, aby zwrócić tylko te, których id zawiera keyword
+    found = [recipe for recipe in all_recipes if str(keyword) in str(recipe.name)]
+
+    # Konwertuj found : List[RECIPES] na JSON
+    found_json, df = list_recipes_to_json_df(found)
+    print(df.head())
+
+    return found_json
+
+
+
+@app.get("/search/{keyword}/{sorting}/{filtering}")
+async def recipes(keyword: str, sorting: str, filtering: str, criteria: int):
+    db = Prisma()
+    await db.connect()
+    all_recipes = await db.recipes.find_many(order={sorting: 'desc'},where={filtering:{'gt': criteria}})  
+    await db.disconnect()
+
+    
+    found = [recipe for recipe in all_recipes if str(keyword) in str(recipe.name)]
+
+    found_json, df = list_recipes_to_json_df(found)
+    print(df.head())
+
+    return found_json
+
 
 
 
