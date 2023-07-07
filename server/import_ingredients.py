@@ -21,12 +21,13 @@ async def import_ingredient(ingredient: dict  ,
         # print(ingredient)
         # print(ingredient['recipe_id'])
         # print(type(ingredient['recipe_id']))
-        responding_recipe = await db.recipes.find_first(
-            where={'slug': ingredient['recipe_id']}
-        )
-        # print(responding_recipe)
-        if responding_recipe is not None:
-            ingredient['recipe_id'] = responding_recipe.id
+        if type(ingredient['recipe_id']) == str:
+            responding_recipe = await db.recipes.find_first(
+                where={'slug': ingredient['recipe_id']}
+            )
+            # print(responding_recipe)
+            if responding_recipe is not None:
+                ingredient['recipe_id'] = responding_recipe.id
         if type(ingredient['comment']) == float:
             ingredient['comment'] = ""
         if type(ingredient['quantity']) == float:
