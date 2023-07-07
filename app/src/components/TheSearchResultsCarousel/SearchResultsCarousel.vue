@@ -34,9 +34,14 @@ const tags = [
 ]
 
 const props = withDefaults(
-  defineProps<{ items?: any[]; recipesToShow?: 'all' | 'favourite' | 'owned' }>(),
+  defineProps<{
+    items?: any[]
+    recipesToShow?: 'all' | 'favourite' | 'owned'
+    showSorting?: boolean
+  }>(),
   {
-    recipesToShow: 'all'
+    recipesToShow: 'all',
+    showSorting: true
   }
 )
 
@@ -154,7 +159,7 @@ watch(sorting, () => {
 <template>
   <div>
     <div v-if="isListEmpty" class="search-results-carousel">
-      <div class="filtering-sorting-section">
+      <div v-if="showSorting" class="filtering-sorting-section">
         <Button
           icon="pi pi-filter"
           aria-label="Open filters"

@@ -4,7 +4,7 @@ import Chips from 'primevue/chips'
 import Button from 'primevue/button'
 import router from '@/router'
 
-const selectedKeywords = ref(['pizza'])
+const selectedKeywords = ref(['pancakes'])
 const recommendedKeywords = ref(['asian', 'ramen', 'noodles', 'eggs', 'vegetarian'])
 
 const addKeyword = (keywordName: string) => {

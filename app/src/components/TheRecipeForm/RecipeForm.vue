@@ -22,7 +22,7 @@ watch(isFormValid, (newVal) => {
     // push new object to database
     const tempID = 100
     axios
-      .post('http://127.0.0.1:8000/createRecipe', data, {
+      .post('http://127.0.0.1:8000/createRecipe', JSON.stringify(data), {
         headers: {
           'Access-Control-Allow-Origin': '*'
         }

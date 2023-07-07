@@ -16,7 +16,7 @@ onMounted(async () => {
   items.value = await axios
     .get(`http://127.0.0.1:8000/search/${keyword}`)
     .then((response) => {
-      return JSON.parse(response.data)
+      return response.data
     })
     .catch((err) => console.log(err))
 })

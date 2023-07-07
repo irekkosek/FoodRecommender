@@ -8,6 +8,7 @@ import Rating from 'primevue/rating'
 import Loader from '@/components/common/Loader.vue'
 import { useSetSavedIngredientsStore } from '@/stores/setSavedIngredients'
 import axios from 'axios'
+import { useUserLoginStore } from '@/stores/userLogin'
 
 const route = useRoute()
 const recipe = ref()
@@ -16,6 +17,8 @@ const score = ref(0)
 const checkedIngredients = ref()
 const isLiked = ref(false)
 const setSavedIngredients = useSetSavedIngredientsStore()
+const userLogin = useUserLoginStore()
+
 const steps = [
   'Mix dry ingredients.',
   'Melt butter.',
@@ -71,6 +74,25 @@ onMounted(async () => {
 const goToSource = (url: string) => {
   window.location.href = url
 }
+
+const updateIsLiked = async () => {
+  const recipeID = route.query.id as unknown as string
+  if (isLiked.value) {
+    await axios
+      .post(`http://127.0.0.1:8000/user/${userLogin.getUserId()}/like/${recipeID}`)
+      .then((response) => {
+        return response.data[0]
+      })
+      .catch((err) => console.log(err))
+  } else {
+    await axios
+      .get(`http://127.0.0.1:8000/delete/user/${userLogin.getUserId()}/like/${recipeID}`)
+      .then((response) => {
+        return response.data[0]
+      })
+      .catch((err) => console.log(err))
+  }
+}
 </script>
 
 <template>
@@ -98,6 +120,7 @@ const goToSource = (url: string) => {
         offLabel=""
         onIcon="pi pi-heart-fill"
         offIcon="pi pi-heart"
+        @click="updateIsLiked"
       />
       <div class="recipe__info">
         <div class="recipe__ingredients-section">
