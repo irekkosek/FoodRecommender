@@ -4,7 +4,7 @@ from hmac import new
 from os import name
 import re
 from tkinter import N
-from turtle import mode
+from turtle import mode, up
 from venv import create
 from numpy import rec, where
 from prisma import Prisma, types, models
@@ -39,17 +39,19 @@ app.add_middleware(
 
 
 @app.post("/recipes/update/{id}",  response_model=models.RECIPES)
-async def update(recipe: RECIPESWithoutId , id: int):
-    db = Prisma()
-    await db.connect()
-    updated_recipe_input = types.RECIPESUpdateInput(**json.loads(recipe.json()))
-    updated_recipe = await db.recipes.update(
-    where={
-        'id': id,
-    },
-    data=updated_recipe_input,
-    )
-    await db.disconnect()
+async def update(recipe:  dict , id: int):
+    # db = Prisma()
+    # await db.connect()
+    # updated_recipe_input = types.RECIPESUpdateInput(**json.loads(recipe.json()))
+    # updated_recipe = await db.recipes.update(
+    # where={
+    #     'id': id,
+    # },
+    # data=updated_recipe_input,
+    # )
+    # await db.disconnect()
+    recipe['id'] = id
+    updated_recipe = await import_recipes(recipe, output_id=True, debug=True, verbose=True)
     return updated_recipe
 
 @app.post("/recipes/delete/{recipe_id}")
