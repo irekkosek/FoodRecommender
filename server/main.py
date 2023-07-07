@@ -435,7 +435,27 @@ async def getUsers():
     await db.disconnect()
     return users
 
-    
+@app.post("/update/user/", response_model=models.USERS)
+async def updateUser(user: types.USERSUpdateInput):
+    db = Prisma()
+    await db.connect()
+    updated_user = await db.users.update(
+    where={
+        'id': user["id"], # type: ignore
+    },
+    data=user,
+    )
+    await db.disconnect()
+    return updated_user
+
+@app.get("/users/{user_id}", response_model=models.USERS)
+async def getUser(user_id: int):
+    db = Prisma()
+    await db.connect()
+    user = await db.users.find_first(where={'id': user_id})
+    await db.disconnect()
+    return user
+
 
 
 
