@@ -408,6 +408,35 @@ async def getIntructions(recipe_id: int, debug=False, verbose=True):
     await db.disconnect()
     return new_instructions
 
+@app.post("/create/user/", response_model=models.USERS)
+async def createUser(user: types.USERSCreateInput )-> models.USERS :
+    db = Prisma()
+    await db.connect()
+    new_user = await db.users.create(
+        data=user
+    )
+    await db.disconnect()
+    return new_user
+@app.get("/delete/user/{user_id}", response_model=models.USERS)
+async def deleteUser(user_id: int):
+    db = Prisma()
+    await db.connect()
+    user = await db.users.delete(
+        where={'id': user_id}
+    )
+    await db.disconnect()
+    return user
+
+@app.get("/users/", response_model=list[models.USERS])
+async def getUsers():
+    db = Prisma()
+    await db.connect()
+    users = await db.users.find_many()
+    await db.disconnect()
+    return users
+
+    
+
 
 
 #python3 main.py
