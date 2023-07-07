@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import InputText from 'primevue/inputtext'
-import InputNumber from 'primevue/inputnumber'
 import Chips from 'primevue/chips'
 import Button from 'primevue/button'
 import Divider from 'primevue/divider'
@@ -22,11 +21,15 @@ watch(isFormValid, (newVal) => {
     // push new object to database
     const tempID = 100
     axios
-      .post('http://127.0.0.1:8000/createRecipe', JSON.stringify(data), {
-        headers: {
-          'Access-Control-Allow-Origin': '*'
+      .post(
+        `http://127.0.0.1:8000/recipes/update/${props.recipe.id}`,
+        JSON.stringify({ name: name.value }),
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
         }
-      })
+      )
       .then((response) => {
         console.log(response)
       })
@@ -51,7 +54,6 @@ watch(
         !name.value ||
         !(ingredients.value.length > 0) ||
         !(tags.value.length > 0) ||
-        !(stepsValues.value.length > 0) ||
         !enteredImageURL.value
       )
         isFormValid.value = false
@@ -103,6 +105,7 @@ onMounted(() => {
   name.value = r.name
   ingredients.value = r.ingredients
   stepsValues.value = r.steps
+  if (stepsValues.value === undefined) stepsValues.value = []
   tags.value = (Object.keys(r) as (keyof typeof r)[]).filter((key) => {
     return r[key] === 1
   })

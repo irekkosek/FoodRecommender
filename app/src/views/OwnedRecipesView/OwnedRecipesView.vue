@@ -15,11 +15,9 @@ onMounted(async () => {
   items.value = await axios
     .get(`http://127.0.0.1:8000/owned-recipes/${userLogin.getUserId()}`)
     .then((response) => {
-      return response.data.map((obj: any) => obj.recipe)
+      return response.data.map((obj: any) => ({ ...obj.recipe, USER_owns_RECIPES: 1 }))
     })
     .catch((err) => console.log(err))
-
-  console.log(items.value)
 })
 </script>
 

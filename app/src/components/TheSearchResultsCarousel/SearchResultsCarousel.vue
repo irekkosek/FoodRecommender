@@ -95,14 +95,14 @@ watch(isFilterSidebarVisible, async (newVal) => {
         recipes.value = await axios
           .get(`http://127.0.0.1:8000/search/${keyword}`)
           .then((response) => {
-            return JSON.parse(response.data)
+            return response.data
           })
           .catch((err) => console.log(err))
       } else {
         recipes.value = await axios
           .get(`http://127.0.0.1:8000/search/${keyword}/${selectedSorting.value}`)
           .then((response) => {
-            return JSON.parse(response.data)
+            return response.data
           })
           .catch((err) => console.log(err))
       }
@@ -112,7 +112,7 @@ watch(isFilterSidebarVisible, async (newVal) => {
       recipes.value = await axios
         .get(`http://127.0.0.1:8000/search/${keyword}/id/${filtering}?criteria=1`)
         .then((response) => {
-          return JSON.parse(response.data)
+          return response.data
         })
         .catch((err) => console.log(err))
     } else {
@@ -121,7 +121,7 @@ watch(isFilterSidebarVisible, async (newVal) => {
           `http://127.0.0.1:8000/search/${keyword}/${selectedSorting.value}/${filtering}?criteria=1`
         )
         .then((response) => {
-          return JSON.parse(response.data)
+          return response.data
         })
         .catch((err) => console.log(err))
     }
@@ -137,14 +137,14 @@ watch(isSortSidebarVisible, async (newVal) => {
       recipes.value = await axios
         .get(`http://127.0.0.1:8000/search/${keyword}`)
         .then((response) => {
-          return JSON.parse(response.data)
+          return response.data
         })
         .catch((err) => console.log(err))
     } else {
       recipes.value = await axios
         .get(`http://127.0.0.1:8000/search/${keyword}/${selectedSorting.value}`)
         .then((response) => {
-          return JSON.parse(response.data)
+          return response.data
         })
         .catch((err) => console.log(err))
     }
@@ -158,7 +158,7 @@ watch(sorting, () => {
 </script>
 <template>
   <div>
-    <div v-if="isListEmpty" class="search-results-carousel">
+    <div class="search-results-carousel">
       <div v-if="showSorting" class="filtering-sorting-section">
         <Button
           icon="pi pi-filter"
@@ -182,7 +182,7 @@ watch(sorting, () => {
           aria-label="Sorting"
         />
       </div>
-      <div class="search-results-carousel__wrapper">
+      <div v-if="isListEmpty" class="search-results-carousel__wrapper">
         <div
           class="recipe"
           v-for="{
@@ -216,6 +216,9 @@ watch(sorting, () => {
             </div>
           </div>
         </div>
+      </div>
+      <div v-else>
+        <p>Nothing here for now 😉</p>
       </div>
       <Sidebar v-model:visible="isFilterSidebarVisible" position="bottom">
         <h2>Filter by</h2>
@@ -253,9 +256,6 @@ watch(sorting, () => {
           </div>
         </div>
       </Sidebar>
-    </div>
-    <div v-else>
-      <p>Nothing here for now 😉</p>
     </div>
   </div>
 </template>
