@@ -407,7 +407,25 @@ async def getIntructions(recipe_id: int, debug=False, verbose=True):
         print(f'new_instructions: {new_instructions}') if verbose else None
     await db.disconnect()
     return new_instructions
+@app.post("/create/ingredients/", response_model=models.INGREDIENTS)
+async def createIngredients(ingredient: types.INGREDIENTSCreateInput)-> models.INGREDIENTS :
+    db = Prisma()
+    await db.connect()
+    new_ingredient = await db.ingredients.create(
+        data=ingredient
+    )
+    await db.disconnect()
+    return new_ingredient
 
+@app.post("/create/instructions/", response_model=models.INSTRUCTIONS)
+async def createInstructions(instruction: types.INSTRUCTIONSCreateInput)-> models.INSTRUCTIONS :
+    db = Prisma()
+    await db.connect()
+    new_instruction = await db.instructions.create(
+        data=instruction
+    )
+    await db.disconnect()
+    return new_instruction
 @app.get("/delete/ingredients/{ingredient_id}", response_model=models.INGREDIENTS)
 async def deleteIngredients(ingredient_id: int ):
     db = Prisma()
