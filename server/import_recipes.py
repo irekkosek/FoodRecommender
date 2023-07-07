@@ -1,4 +1,5 @@
 import asyncio
+from turtle import up
 from click import progressbar
 #from doctest import debug
 #from os import name
@@ -13,6 +14,7 @@ import sys
 from prisma.partials import RECIPESWithoutId
 import json
 
+
 args = sys.argv
 
 async def import_recipes(recipe: dict | RECIPESWithoutId ,
@@ -25,13 +27,22 @@ async def import_recipes(recipe: dict | RECIPESWithoutId ,
         if type(recipe['video_url']) is float:
             recipe['video_url'] = None
         # Create a new recipe
+        
         new_recipe_input = types.RECIPESCreateInput(**recipe)
-    
+        upsert_recipe_input = types.RECIPESUpsertInput(
+            create=types.RECIPESCreateInput(**recipe),update=types.RECIPESUpdateInput(**recipe))
+        print(f' upsert_recipe_input : {upsert_recipe_input}')
+        new_recipe = await db.recipes.upsert(
+        where={'id': recipe['id']},
+        data=upsert_recipe_input
+    )
     elif type(recipe) is RECIPESWithoutId:
         new_recipe_input = types.RECIPESCreateInput(**json.loads(recipe.json()))
+        new_recipe = await db.recipes.create( data=new_recipe_input)
+
     else:
         raise TypeError("recipe must be a dict or RECIPESWithoutId")
-    new_recipe = await db.recipes.create( data=new_recipe_input)
+
 
     if verbose:
         print(f'created recipe: {new_recipe.json(indent=2)}')
