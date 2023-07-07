@@ -501,6 +501,18 @@ async def getUser(user_id: int):
     await db.disconnect()
     return user
 
+@app.get("/isLiked/{user_id}/{recipe_id}", response_model=bool)
+async def isLiked(user_id: int, recipe_id: int):
+    db = Prisma()
+    await db.connect()
+    userfavs = await db.user_likes_recipes.find_first(
+        where={'USER_id': user_id, 'RECIPE_id': recipe_id}
+    )
+    await db.disconnect()
+    if userfavs is None:
+        return False
+    return True
+
 
 
 
