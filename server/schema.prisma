@@ -151,7 +151,7 @@ model INGREDIENTS {
   quantity  String?
   display   String?
   recipe_id Int
-  recipe    RECIPES @relation(fields: [recipe_id], references: [id])
+  recipe    RECIPES? @relation(fields: [recipe_id], references: [id])
 }
 
 model USER_likes_RECIPES {
