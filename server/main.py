@@ -407,6 +407,98 @@ async def getIntructions(recipe_id: int, debug=False, verbose=True):
         print(f'new_instructions: {new_instructions}') if verbose else None
     await db.disconnect()
     return new_instructions
+@app.post("/create/ingredients/", response_model=models.INGREDIENTS)
+async def createIngredients(ingredient: types.INGREDIENTSCreateInput)-> models.INGREDIENTS :
+    db = Prisma()
+    await db.connect()
+    new_ingredient = await db.ingredients.create(
+        data=ingredient
+    )
+    await db.disconnect()
+    return new_ingredient
+
+@app.post("/create/instructions/", response_model=models.INSTRUCTIONS)
+async def createInstructions(instruction: types.INSTRUCTIONSCreateInput)-> models.INSTRUCTIONS :
+    db = Prisma()
+    await db.connect()
+    new_instruction = await db.instructions.create(
+        data=instruction
+    )
+    await db.disconnect()
+    return new_instruction
+@app.get("/delete/ingredients/{ingredient_id}", response_model=models.INGREDIENTS)
+async def deleteIngredients(ingredient_id: int ):
+    db = Prisma()
+    await db.connect()
+    ingredients = await db.ingredients.delete(
+        where={
+            "id": ingredient_id,
+        }
+    )
+    await db.disconnect()
+    return ingredients
+
+@app.get("/delete/instructions/{instruction_id}", response_model=models.INSTRUCTIONS)
+async def deleteInstructions(instruction_id: int ):
+    db = Prisma()
+    await db.connect()
+    instructions = await db.instructions.delete(
+        where={
+            "id": instruction_id,
+        }
+    )
+    await db.disconnect()
+    return instructions
+
+
+@app.post("/create/user/", response_model=models.USERS)
+async def createUser(user: types.USERSCreateInput )-> models.USERS :
+    db = Prisma()
+    await db.connect()
+    new_user = await db.users.create(
+        data=user
+    )
+    await db.disconnect()
+    return new_user
+@app.get("/delete/user/{user_id}", response_model=models.USERS)
+async def deleteUser(user_id: int):
+    db = Prisma()
+    await db.connect()
+    user = await db.users.delete(
+        where={'id': user_id}
+    )
+    await db.disconnect()
+    return user
+
+@app.get("/users/", response_model=list[models.USERS])
+async def getUsers():
+    db = Prisma()
+    await db.connect()
+    users = await db.users.find_many()
+    await db.disconnect()
+    return users
+
+@app.post("/update/user/", response_model=models.USERS)
+async def updateUser(user: types.USERSUpdateInput):
+    db = Prisma()
+    await db.connect()
+    updated_user = await db.users.update(
+    where={
+        'id': user["id"], # type: ignore
+    },
+    data=user,
+    )
+    await db.disconnect()
+    return updated_user
+
+@app.get("/users/{user_id}", response_model=models.USERS)
+async def getUser(user_id: int):
+    db = Prisma()
+    await db.connect()
+    user = await db.users.find_first(where={'id': user_id})
+    await db.disconnect()
+    return user
+
 
 
 
