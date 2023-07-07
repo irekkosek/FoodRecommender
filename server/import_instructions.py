@@ -21,12 +21,13 @@ async def import_instruction(instruction: dict  ,
         print(f'input instruction: {instruction}')
         # print(instruction['recipe_id'])
         # print(type(instruction['recipe_id']))
-        responding_recipe = await db.recipes.find_first(
-            where={'slug': instruction['recipe_id']}
-        )
-        # print(responding_recipe)
-        if responding_recipe is not None:
-            instruction['recipe_id'] = responding_recipe.id
+        if type(instruction['recipe_id']) == str:
+            responding_recipe = await db.recipes.find_first(
+                where={'slug': instruction['recipe_id']}
+            )
+            # print(responding_recipe)
+            if responding_recipe is not None:
+                instruction['recipe_id'] = responding_recipe.id
         if type(instruction['step']) == float:
             instruction['step'] = ""
         if type(instruction['step_number']) == float:
