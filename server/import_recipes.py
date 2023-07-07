@@ -30,13 +30,16 @@ async def import_recipes(recipe: dict | RECIPESWithoutId ,
             # Create a new recipe
         
         new_recipe_input = types.RECIPESCreateInput(**recipe)
-        upsert_recipe_input = types.RECIPESUpsertInput(
-            create=types.RECIPESCreateInput(**recipe),update=types.RECIPESUpdateInput(**recipe))
-        print(f' upsert_recipe_input : {upsert_recipe_input}')
-        new_recipe = await db.recipes.upsert(
-        where={'id': recipe['id']},
-        data=upsert_recipe_input
-    )
+        if 'id' in recipe:
+            upsert_recipe_input = types.RECIPESUpsertInput(
+                create=types.RECIPESCreateInput(**recipe),update=types.RECIPESUpdateInput(**recipe))
+            print(f' upsert_recipe_input : {upsert_recipe_input}')
+            new_recipe = await db.recipes.upsert(
+            where={'id': recipe['id']},
+            data=upsert_recipe_input
+            )
+        else:
+            new_recipe = await db.recipes.create( data=new_recipe_input)
     elif type(recipe) is RECIPESWithoutId:
         new_recipe_input = types.RECIPESCreateInput(**json.loads(recipe.json()))
         new_recipe = await db.recipes.create( data=new_recipe_input)
