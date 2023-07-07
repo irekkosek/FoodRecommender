@@ -24,9 +24,10 @@ async def import_recipes(recipe: dict | RECIPESWithoutId ,
     await db.connect()
     if type(recipe) is dict:
         # check if video_url is NaN
-        if type(recipe['video_url']) is float:
-            recipe['video_url'] = None
-        # Create a new recipe
+        if 'video_url' in recipe:
+            if type(recipe['video_url']) is float:
+                recipe['video_url'] = None
+            # Create a new recipe
         
         new_recipe_input = types.RECIPESCreateInput(**recipe)
         upsert_recipe_input = types.RECIPESUpsertInput(
