@@ -9,7 +9,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { useSaveRecipeStore } from '@/stores/saveRecipe'
 import axios from 'axios'
 import { useUserLoginStore } from '@/stores/userLogin'
-import { data } from './data'
 
 const router = useRouter()
 const saveRecipeStore = useSaveRecipeStore()
@@ -63,13 +62,13 @@ watch(
   }
 )
 
-const name = ref('Name')
+const name = ref('Name of recipe')
 const ingredients = ref(['milk'])
 const tags = ref(['asian', 'easy'])
 const stepsValues = ref(['Add more steps!'])
 const enteredStep = ref('')
 // const enteredPrepTime = ref(30)
-const enteredImageURL = ref('temp')
+const enteredImageURL = ref('Here put url to your image.')
 
 // const formFields = ref([
 //   {name: 'name', value: null},

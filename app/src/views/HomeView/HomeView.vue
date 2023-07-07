@@ -12,7 +12,7 @@ const userName = ref()
 const howManyRecipes = ref()
 
 onMounted(async () => {
-  userName.value = 'Cukinia'
+  userName.value = 'Kinga'
 
   const recipesIds = await axios
     .get(`http://127.0.0.1:8000/recommend/${userLogin.getUserId()}?debug=false&verbose=true`)
@@ -21,18 +21,23 @@ onMounted(async () => {
     })
     .catch((err) => console.log(err))
 
-  const array = recipesIds.slice(1, -1).split(',')
-  howManyRecipes.value = array.length
+  const array = recipesIds
+    .slice(1, -1)
+    .split(',')
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 5)
 
   array.forEach(async (id: any) => {
-    const recipe = await axios
+    const recipes = await axios
       .get(`http://127.0.0.1:8000/recipes/${id}`)
       .then((response) => {
         return response.data
       })
       .catch((err) => console.log(err))
-    if (!recipe) return
-    items.value.push(recipe[0] as never)
+
+    if (!recipes) return
+    howManyRecipes.value = array.length
+    items.value.push(recipes[0] as never)
   })
 })
 

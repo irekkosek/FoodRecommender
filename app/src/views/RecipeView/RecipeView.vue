@@ -55,6 +55,13 @@ onMounted(async () => {
     .catch((err) => console.log(err))
   console.log(recipe.value)
 
+  isLiked.value = await axios
+    .get(`http://127.0.0.1:8000/isLiked/${userLogin.getUserId()}/${recipeID}`)
+    .then((response) => {
+      return response.data
+    })
+    .catch((err) => console.log(err))
+
   tags.value = (Object.keys(recipe.value) as (keyof typeof recipe.value)[]).filter((key) => {
     return recipe.value[key] === 1
   })

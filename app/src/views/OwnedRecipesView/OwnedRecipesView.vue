@@ -2,7 +2,6 @@
 import SearchResultCarousel from '@/components/TheSearchResultsCarousel/SearchResultsCarousel.vue'
 import Divider from 'primevue/divider'
 import { onMounted, ref } from 'vue'
-import { RecipesData } from '../database'
 import Loader from '@/components/common/Loader.vue'
 import axios from 'axios'
 import { useUserLoginStore } from '@/stores/userLogin'
