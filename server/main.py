@@ -1,5 +1,6 @@
 import asyncio
 from doctest import debug
+from hmac import new
 from os import name
 import re
 from tkinter import N
@@ -13,8 +14,12 @@ import pandas as pd
 from FoodRecommender import FoodRecommender
 from FoodRecommender import createRecommendations
 from import_recipes import import_recipes
+from import_ingredients import import_ingredient
 from prisma.partials import RECIPESWithoutId
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
+
+mod_path = Path(__file__).parent
 
 origins = [
     "*"
@@ -334,7 +339,43 @@ async def deleteOwnedRecipes(user_id: int, recipe_id: int):
     )
     await db.disconnect()
     return userowns
+@app.get("/ingredients/{recipe_id}", response_model=list[models.INGREDIENTS] | str)
+async def getIngredients(recipe_id: int, debug=False, verbose=True): 
+    db = Prisma()
+    await db.connect()
+    ingredients = await db.ingredients.find_many(
+        where={ "recipe_id": recipe_id}
+    )
+    if len(ingredients) > 0 :
+        print(f'ingredients found in db: {ingredients}') if verbose else None
+        return ingredients
+    else:
+        responding_recipe = await db.recipes.find_first(where={'id': recipe_id})
+        print(f'recipe found in db: {responding_recipe}') if debug else None
+        if responding_recipe is not None:
+            slug = responding_recipe.slug
+        else:
+            return "recipe not found"
+        print(f'slug: {slug}') if debug else None
+        filename="ingredients.csv"
+        dataset_abs_path = (mod_path / filename).resolve()
+        df = pd.read_csv(fr'{dataset_abs_path}')
+        df = df[df['recipe_id'] == slug]
+        print(f'df: {df}') if debug else None
+        rows = df.itertuples(index=False)
+        new_ingredients : list[models.INGREDIENTS] = [] 
+        ingredient = {}
+        for row in rows:
+            ingredient = row._asdict() 
+            print(f'ingredient: {ingredient}') if debug else None
+            new_ingredients.append(await import_ingredient(ingredient, output_id=True, debug=False, verbose=False))
+        print(f'new_ingredients: {new_ingredients}') if verbose else None
+        return new_ingredients
 
+
+    
+    await db.disconnect()
+    return ingredients
 
 
 #python3 main.py
