@@ -518,6 +518,15 @@ async def getUser(user_id: int):
     await db.disconnect()
     return user
 
+@app.get("/usersbyname/{user_name}", response_model=models.USERS)
+async def getUserbyname(user_name: str):
+    db = Prisma()
+    await db.connect()
+    user = await db.users.find_first(where={'name': user_name})
+    await db.disconnect()
+    return user
+
+
 @app.get("/isLiked/{user_id}/{recipe_id}", response_model=bool)
 async def isLiked(user_id: int, recipe_id: int):
     db = Prisma()
