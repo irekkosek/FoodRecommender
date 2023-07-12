@@ -18,11 +18,11 @@ const isFormValid = ref(false)
 watch(isFormValid, (newVal) => {
   if (newVal) {
     // push new object to database
-    const tempID = 100
+    console.log('hi')
     axios
       .post(
         `http://127.0.0.1:8000/recipes/update/${props.recipe.id}`,
-        JSON.stringify({ name: name.value }),
+        JSON.stringify({ name: name.value, thumbnail_url: enteredImageURL.value }),
         {
           headers: {
             'Access-Control-Allow-Origin': '*'
@@ -39,7 +39,7 @@ watch(isFormValid, (newVal) => {
       path: '/owned-recipe',
       query: {
         ...route.query,
-        id: route.query.id ? route.query.id : tempID
+        id: route.query.id
       }
     })
   }

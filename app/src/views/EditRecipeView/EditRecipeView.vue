@@ -3,6 +3,13 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import RecipeForm from '@/components/TheRecipeForm/RecipeForm.vue'
 import axios from 'axios'
+import { watch } from 'vue'
+
+const isSaveRecipeButtonClicked = ref()
+
+watch(isSaveRecipeButtonClicked, () => {
+  console.log('Create new record in database')
+})
 
 const route = useRoute()
 const recipe = ref()
@@ -22,6 +29,11 @@ onMounted(async () => {
 
 <template>
   <div>
-    <RecipeForm v-if="recipe" :recipe="recipe" :pageTitle="`Edit \'${recipe.name}\' recipe`" />
+    <RecipeForm
+      v-if="recipe"
+      :recipe="recipe"
+      :pageTitle="`Edit \'${recipe.name}\' recipe`"
+      @save-recipe-button-clicked="isSaveRecipeButtonClicked = true"
+    />
   </div>
 </template>
