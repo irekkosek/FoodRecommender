@@ -55,6 +55,8 @@ then
     python create_user.py 
     echo "-- running create_user_likes.py--"
     python create_user_likes.py
+    echo "-- running create_user_owns.py--"
+    python create_user_owns.py
     echo "-- Finished setup--"
 else
     echo "-- Not seeding database --"

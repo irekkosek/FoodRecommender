@@ -33,7 +33,7 @@ async def import_recipes(recipe: dict | RECIPESWithoutId ,
         if 'id' in recipe:
             upsert_recipe_input = types.RECIPESUpsertInput(
                 create=types.RECIPESCreateInput(**recipe),update=types.RECIPESUpdateInput(**recipe))
-            print(f' upsert_recipe_input : {upsert_recipe_input}')
+            print(f' upsert_recipe_input : {upsert_recipe_input}') if debug else None
             new_recipe = await db.recipes.upsert(
             where={'id': recipe['id']},
             data=upsert_recipe_input
