@@ -8,7 +8,7 @@ from turtle import mode, up
 from venv import create
 from numpy import rec, where
 from prisma import Prisma, types, models
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import json
 import pandas as pd
 from FoodRecommender import FoodRecommender
@@ -200,6 +200,7 @@ async def emptyRecommend():
 
 @app.get("/recommend/{user_id}")
 async def RunRecommend(user_id: int, debug=False, verbose=True):
+    recommendedIdsJson = "[]"
     db = Prisma()
     await db.connect()
     userfavs = await db.user_likes_recipes.find_many(
@@ -209,6 +210,11 @@ async def RunRecommend(user_id: int, debug=False, verbose=True):
         # }
     )
     userfavs_ids = [fav.RECIPE_id for fav in userfavs]
+    if userfavs_ids.__len__() == 0:
+        # raise HTTPException(status_code=204,
+        #                     detail="User has no favorites",
+        #                     headers={"Content-Error": "User has no favorites"})
+        return recommendedIdsJson
     user_db_recipes = await db.recipes.find_many(where={
         'id': {
             'in': userfavs_ids
