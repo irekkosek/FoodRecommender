@@ -35,7 +35,7 @@ async def import_ingredient(ingredient: dict  ,
         if type(ingredient['display']) == float:
             ingredient['display'] = ""
         
-        # new_ingredient_input = types.INGREDIENTSCreateInput(**ingredient)
+        new_ingredient_input = types.INGREDIENTSCreateInput(**ingredient)
         upsert_ingredient_input = types.INGREDIENTSUpsertInput(
             create=types.INGREDIENTSCreateInput(**ingredient),update=types.INGREDIENTSUpdateInput(**ingredient))
 
@@ -43,10 +43,15 @@ async def import_ingredient(ingredient: dict  ,
     #     new_ingredient_input = types.RECIPESCreateInput(**json.loads(ingredient.json()))
     else:
         raise TypeError("ingredient must be a dict") # or RECIPESWithoutId")
-    new_ingredient = await db.ingredients.upsert(
-        where={'id': ingredient['id']},
-        data=upsert_ingredient_input
-    )
+    if 'id' in ingredient:
+        new_ingredient = await db.ingredients.upsert(
+            where={'id': ingredient['id']},
+            data=upsert_ingredient_input
+        )
+    else:
+        new_ingredient = await db.ingredients.create(
+            data=new_ingredient_input
+        )
     if verbose:
         print(f'created recipe: {new_ingredient.json(indent=2)}')
 

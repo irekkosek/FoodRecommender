@@ -34,7 +34,7 @@ async def import_instruction(instruction: dict  ,
             instruction['step_number'] = 0
 
         print(f'formatted instruction: {instruction}')
-        # new_instruction_input = types.INSTRUCTIONSCreateInput(**ingredient)
+        new_instruction_input = types.INSTRUCTIONSCreateInput(**instruction)
         upsert_instruction_input = types.INSTRUCTIONSUpsertInput(
             create=types.INSTRUCTIONSCreateInput(**instruction),update=types.INSTRUCTIONSUpdateInput(**instruction))
 
@@ -42,11 +42,16 @@ async def import_instruction(instruction: dict  ,
     #     new_instruction_input = types.RECIPESCreateInput(**json.loads(instruction.json()))
     else:
         raise TypeError("instruction must be a dict") # or RECIPESWithoutId")
-    print(f' upsert_instruction_input : {upsert_instruction_input}')
-    new_instruction = await db.instructions.upsert(
+    print(f' upsert_instruction_input : {upsert_instruction_input}') if debug else None
+    if 'id' in instruction:
+        new_instruction = await db.instructions.upsert(
         where={'id': instruction['id']},
         data=upsert_instruction_input
-    )
+        )
+    else:
+        new_instruction = await db.instructions.create(
+            data=new_instruction_input
+        )
     if verbose:
         print(f'created recipe: {new_instruction.json(indent=2)}')
 
