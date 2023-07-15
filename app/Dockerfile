@@ -1,8 +1,7 @@
 FROM node:20 as dev
 WORKDIR /app
-COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
-RUN yarn cache clean && yarn install 
+COPY package.json yarn.lock /app/
+RUN  yarn install && yarn cache clean
 COPY . /app
 CMD ["yarn", "run", "dev", "--host"]
 # FROM node as dev 
