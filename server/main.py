@@ -189,7 +189,12 @@ async def recipes():
 async def recipesId(recipe_id: int):
     db = Prisma()
     await db.connect()
-    found = await db.recipes.find_many(where={'id': recipe_id})
+    found = await db.recipes.find_many(
+        where={'id': recipe_id},
+        include={
+            'USER_likes_RECIPES': True
+        }
+                )
     await db.disconnect()
     return found
 @app.get("/recommend")
